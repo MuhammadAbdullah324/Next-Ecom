@@ -142,8 +142,8 @@ test("account: sign up, keep guest cart, save address, see order history", async
 
   // Sign out, then sign back in as a guest with a new cart item: the carts merge.
   await page.goto("/");
-  await page.getByText("Account", { exact: true }).click();
-  await page.getByRole("button", { name: "Sign out" }).click();
+  await page.getByRole("button", { name: "Account" }).click();
+  await page.getByRole("menuitem", { name: "Sign out" }).click();
   await addToCart(page, "rainbow-socks-5-pack");
   await page.goto("/sign-in?next=/cart");
   await page.getByLabel("Email").fill(email);

@@ -10,7 +10,7 @@ export function OutcomeBanner({ order, isGuest }: { order: Order; isGuest: boole
     success: "bg-success-soft text-success",
     warning: "bg-warning-soft text-warning",
     danger: "bg-danger-soft text-danger",
-    neutral: "bg-line text-ink-soft",
+    neutral: "bg-muted text-foreground/80",
   }[outcome.tone];
 
   const heading = {
@@ -24,12 +24,12 @@ export function OutcomeBanner({ order, isGuest }: { order: Order; isGuest: boole
   }[outcome.key];
 
   return (
-    <div className={`rounded-card px-6 py-6 ${styles}`} role="status">
+    <div className={`rounded-2xl px-6 py-6 ${styles}`} role="status">
       {outcome.key === "awaiting_payment" ? <AutoRefresh /> : null}
-      <h1 className="text-2xl font-bold tracking-tight">{heading}</h1>
-      <p className="mt-2 text-ink-soft">{outcome.description}</p>
+      <h1 className="text-2xl font-semibold tracking-tight">{heading}</h1>
+      <p className="mt-2 text-foreground/80">{outcome.description}</p>
       {outcome.key === "paid" ? (
-        <p className="mt-2 text-ink-soft">
+        <p className="mt-2 text-foreground/80">
           A confirmation email is on its way to <strong>{order.email}</strong>.
         </p>
       ) : null}
@@ -37,7 +37,7 @@ export function OutcomeBanner({ order, isGuest }: { order: Order; isGuest: boole
         {outcome.key === "payment_failed" || outcome.key === "canceled" ? (
           <ButtonLink href="/cart">Return to cart</ButtonLink>
         ) : (
-          <ButtonLink href="/products" variant="secondary">Continue shopping</ButtonLink>
+          <ButtonLink href="/products" variant="outline">Continue shopping</ButtonLink>
         )}
         {outcome.key === "paid" && isGuest ? (
           <ButtonLink href="/sign-up?next=/orders">Create an account to track this order</ButtonLink>

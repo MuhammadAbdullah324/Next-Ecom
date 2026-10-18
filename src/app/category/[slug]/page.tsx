@@ -30,11 +30,11 @@ async function CategoryContent({ params, searchParams }: Pick<PageProps<"/catego
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <nav aria-label="Breadcrumb" className="text-sm text-muted">
-        <Link href="/products" className="hover:text-ink">Products</Link> <span aria-hidden="true">/</span> {category.name}
+      <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
+        <Link href="/products" className="hover:text-foreground">Products</Link> <span aria-hidden="true">/</span> {category.name}
       </nav>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight">{category.name}</h1>
-      {category.description ? <p className="mt-2 text-ink-soft">{category.description}</p> : null}
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{category.name}</h1>
+      {category.description ? <p className="mt-2 text-foreground/80">{category.description}</p> : null}
       <Suspense fallback={<div className="mt-14"><ProductGridSkeleton /></div>}>
         <ListingView base={`/category/${category.slug}`} category={category.slug} searchParams={searchParams} />
       </Suspense>

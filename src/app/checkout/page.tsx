@@ -37,7 +37,7 @@ async function CheckoutContents() {
 export default function CheckoutPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <h1 className="mb-8 text-3xl font-bold tracking-tight">Checkout</h1>
+      <h1 className="mb-8 text-3xl font-semibold tracking-tight sm:text-4xl">Checkout</h1>
       <Suspense fallback={<div className="grid gap-10 lg:grid-cols-[1fr_24rem]"><Skeleton className="h-96" /><Skeleton className="h-80" /></div>}>
         <CheckoutContents />
       </Suspense>

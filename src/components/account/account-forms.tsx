@@ -14,7 +14,7 @@ export function ProfileForm({ fullName, phone }: { fullName: string; phone: stri
       <Field label="Full name" name="full_name" defaultValue={fullName} autoComplete="name" required error={err.full_name} />
       <Field label="Phone" name="phone" type="tel" defaultValue={phone} autoComplete="tel" error={err.phone} />
       <div className="flex items-center gap-3 sm:col-span-2">
-        <SubmitButton variant="secondary" pendingLabel="Saving…">Save</SubmitButton>
+        <SubmitButton variant="outline" pendingLabel="Saving…">Save</SubmitButton>
         <span aria-live="polite" className="text-sm">
           {state.ok ? <span className="text-success">Saved</span> : state.error ? <span className="text-danger">{state.error}</span> : null}
         </span>
@@ -33,8 +33,8 @@ export function AddAddressForm() {
 
   return (
     <form ref={formRef} action={action} className="grid gap-4 sm:grid-cols-2" noValidate>
-      {state.error ? <Alert tone="danger" className="sm:col-span-2">{state.error}</Alert> : null}
-      {state.ok ? <Alert tone="success" className="sm:col-span-2">Address saved.</Alert> : null}
+      {state.error ? <Alert variant="destructive" className="sm:col-span-2">{state.error}</Alert> : null}
+      {state.ok ? <Alert variant="success" className="sm:col-span-2">Address saved.</Alert> : null}
       <Field label="Label" name="label" placeholder="Home, Office…" className="sm:col-span-2" />
       <Field label="Full name" name="full_name" autoComplete="name" required error={err.full_name} />
       <Field label="Phone" name="phone" type="tel" autoComplete="tel" required error={err.phone} />
@@ -45,7 +45,7 @@ export function AddAddressForm() {
       <Field label="Postal code" name="postal_code" autoComplete="postal-code" required error={err.postal_code} />
       <Field label="Country" name="country" autoComplete="country-name" required defaultValue="Pakistan" error={err.country} />
       <label className="flex items-center gap-2 text-sm sm:col-span-2">
-        <input type="checkbox" name="is_default" className="size-4 accent-brand" /> Make this my default address
+        <input type="checkbox" name="is_default" className="size-4 accent-primary" /> Make this my default address
       </label>
       <div className="sm:col-span-2">
         <SubmitButton pendingLabel="Saving…">Save address</SubmitButton>

@@ -1,42 +1,41 @@
+import * as React from "react";
 import Link from "next/link";
-import clsx from "clsx";
-import type { ComponentProps } from "react";
+import { Slot } from "radix-ui";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "ghost" | "danger";
-type Size = "sm" | "md" | "lg";
+const buttonVariants = cva(
+  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold transition-all outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:translate-y-px",
+        destructive: "bg-destructive text-white shadow-sm hover:bg-destructive/90",
+        outline: "border-2 border-border bg-card text-foreground hover:border-foreground/30 hover:bg-muted",
+        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        ghost: "text-foreground/80 hover:bg-muted hover:text-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "min-h-11 px-5 text-sm",
+        sm: "min-h-9 gap-1.5 px-3.5 text-sm",
+        lg: "min-h-12 px-7 text-base",
+        icon: "size-11",
+      },
+    },
+    defaultVariants: { variant: "default", size: "default" },
+  },
+);
 
-const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60";
-const variants: Record<Variant, string> = {
-  primary: "bg-brand text-white hover:bg-brand-strong",
-  secondary: "border border-line bg-surface text-ink hover:border-ink-soft",
-  ghost: "text-ink-soft hover:bg-line/60 hover:text-ink",
-  danger: "text-danger hover:bg-danger-soft",
-};
-const sizes: Record<Size, string> = {
-  sm: "min-h-9 px-3 text-sm",
-  md: "min-h-11 px-5 text-sm",
-  lg: "min-h-12 px-6 text-base",
-};
+type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants> & { asChild?: boolean };
 
-export function buttonClass(variant: Variant = "primary", size: Size = "md", className?: string) {
-  return clsx(base, variants[variant], sizes[size], className);
+function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
+  const Comp = asChild ? Slot.Root : "button";
+  return <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />;
 }
 
-export function Button({
-  variant,
-  size,
-  className,
-  ...props
-}: ComponentProps<"button"> & { variant?: Variant; size?: Size }) {
-  return <button className={buttonClass(variant, size, className)} {...props} />;
+function ButtonLink({ className, variant, size, ...props }: React.ComponentProps<typeof Link> & VariantProps<typeof buttonVariants>) {
+  return <Link data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />;
 }
 
-export function ButtonLink({
-  variant,
-  size,
-  className,
-  ...props
-}: ComponentProps<typeof Link> & { variant?: Variant; size?: Size }) {
-  return <Link className={buttonClass(variant, size, className)} {...props} />;
-}
+export { Button, ButtonLink, buttonVariants };
