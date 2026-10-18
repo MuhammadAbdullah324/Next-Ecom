@@ -12,6 +12,7 @@ You only need sections 1 to 3 to run the store locally. Sections 4 and 5 (Google
 1. In the project, open **SQL Editor** and click **New query**.
 2. Open [`supabase/migrations/20261018000000_init.sql`](supabase/migrations/20261018000000_init.sql), copy all of it, paste it into the editor and click **Run**. You should see "Success. No rows returned".
 3. Click **New query** again. Do the same with [`supabase/seed.sql`](supabase/seed.sql).
+   If you already ran an older seed with the phone accessories catalog, run [`supabase/replace-catalog.sql`](supabase/replace-catalog.sql) first, then `seed.sql`. It removes only products, categories and banners; accounts and orders stay.
 4. Check: open **Table Editor** and pick `products`. It should list 21 products.
 
 ## 3. Turn on sign-in and guest checkout

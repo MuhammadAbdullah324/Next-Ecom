@@ -1,6 +1,6 @@
-# Next Ecom: implementation plan
+# Tiny Threads: implementation plan
 
-A responsive store for mobile accessories built with Next.js (App Router) and Supabase Postgres, following the patterns from the course sessions in this project (server-first data access, `mutate_cart()` cart RPC, saved addresses, order snapshots, Resend, Jest).
+A responsive kids' clothing store built with Next.js (App Router) and Supabase Postgres, following the patterns from the course sessions in this project (server-first data access, `mutate_cart()` cart RPC, saved addresses, order snapshots, Resend, Jest).
 
 Files next to this plan:
 
@@ -200,7 +200,7 @@ SUPABASE_SERVICE_ROLE_KEY=          # server only
 STRIPE_SECRET_KEY=                  # server only
 STRIPE_WEBHOOK_SECRET=              # server only
 RESEND_API_KEY=                     # server only
-EMAIL_FROM="Next Ecom <orders@yourdomain.com>"
+EMAIL_FROM="Tiny Threads <orders@yourdomain.com>"
 GUEST_MERGE_COOKIE_SECRET=          # server only, signs the guest id cookie for OAuth merges
 ```
 

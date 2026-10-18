@@ -6,7 +6,7 @@ const serverSchema = z.object({
   STRIPE_SECRET_KEY: z.string().startsWith("sk_"),
   STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_"),
   RESEND_API_KEY: z.string().optional(),
-  EMAIL_FROM: z.string().default("Next Ecom <onboarding@resend.dev>"),
+  EMAIL_FROM: z.string().default("Tiny Threads <onboarding@resend.dev>"),
 });
 
 let cached: z.infer<typeof serverSchema> | undefined;

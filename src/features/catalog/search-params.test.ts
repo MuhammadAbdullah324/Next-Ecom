@@ -6,8 +6,8 @@ describe("parseListingParams", () => {
   });
 
   it("reads filters, repeated brands and sort", () => {
-    const f = parseListingParams({ q: " earbuds ", brand: ["Anker", "Belkin"], min: "10", max: "50", inStock: "1", sort: "price-asc", page: "2" });
-    expect(f).toMatchObject({ q: "earbuds", brand: ["Anker", "Belkin"], min: 10, max: 50, inStock: true, sort: "price-asc", page: 2 });
+    const f = parseListingParams({ q: " pajamas ", brand: ["Sunny Days", "Pebble & Co"], min: "10", max: "50", inStock: "1", sort: "price-asc", page: "2" });
+    expect(f).toMatchObject({ q: "pajamas", brand: ["Sunny Days", "Pebble & Co"], min: 10, max: 50, inStock: true, sort: "price-asc", page: 2 });
   });
 
   it("falls back instead of failing on bad values", () => {
@@ -19,6 +19,6 @@ describe("parseListingParams", () => {
 describe("listingHref", () => {
   it("drops defaults and keeps filters", () => {
     expect(listingHref("/products", { sort: "featured", page: 1 })).toBe("/products");
-    expect(listingHref("/category/cables", { brand: ["Anker"], inStock: true, page: 3 })).toBe("/category/cables?brand=Anker&inStock=1&page=3");
+    expect(listingHref("/category/dresses", { brand: ["Sunny Days"], inStock: true, page: 3 })).toBe("/category/dresses?brand=Sunny+Days&inStock=1&page=3");
   });
 });
