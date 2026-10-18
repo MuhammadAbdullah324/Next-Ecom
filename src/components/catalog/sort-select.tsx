@@ -1,27 +1,22 @@
 "use client";
 
 import { SORTS } from "@/features/catalog/search-params";
+import { NativeSelect } from "@/components/ui/native-select";
 
 // Submits the surrounding filter form as soon as the sort changes.
 export function SortSelect({ value }: { value: string }) {
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor="sort" className="text-sm text-muted">
+      <label htmlFor="sort" className="text-sm font-semibold text-muted-foreground">
         Sort by
       </label>
-      <select
-        id="sort"
-        name="sort"
-        defaultValue={value}
-        onChange={(e) => e.currentTarget.form?.requestSubmit()}
-        className="min-h-10 rounded-full border border-line bg-surface px-3 text-sm"
-      >
+      <NativeSelect id="sort" name="sort" defaultValue={value} onChange={(e) => e.currentTarget.form?.requestSubmit()}>
         {Object.entries(SORTS).map(([key, label]) => (
           <option key={key} value={key}>
             {label}
           </option>
         ))}
-      </select>
+      </NativeSelect>
     </div>
   );
 }

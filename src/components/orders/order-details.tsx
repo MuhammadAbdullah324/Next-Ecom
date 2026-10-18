@@ -14,16 +14,16 @@ export function OrderDetails({ order }: { order: Order }) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
-      <section aria-labelledby="items-heading" className="rounded-card border border-line bg-surface p-6">
+      <section aria-labelledby="items-heading" className="rounded-3xl border bg-card p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="items-heading" className="text-lg font-semibold">Order {order.order_number}</h2>
-          <Badge tone={outcome.tone}>{outcome.label}</Badge>
+          <Badge variant={outcome.tone}>{outcome.label}</Badge>
         </div>
-        <p className="mt-1 text-sm text-muted">Placed {dateFormat.format(new Date(order.created_at))}</p>
-        <ul className="mt-6 divide-y divide-line">
+        <p className="mt-1 text-sm text-muted-foreground">Placed {dateFormat.format(new Date(order.created_at))}</p>
+        <ul className="mt-6 divide-y divide-border">
           {order.items.map((item) => (
             <li key={item.id} className="flex gap-4 py-4 text-sm">
-              <div className="relative size-16 shrink-0 overflow-hidden rounded-lg border border-line">
+              <div className="relative size-16 shrink-0 overflow-hidden rounded-lg border border-border">
                 {item.image_url ? <Image src={item.image_url} alt="" fill sizes="64px" className="object-cover" /> : null}
               </div>
               <div className="flex-1">
@@ -32,8 +32,8 @@ export function OrderDetails({ order }: { order: Order }) {
                 ) : (
                   <p className="font-medium">{item.product_name}</p>
                 )}
-                {item.variant_name !== "Default" ? <p className="text-muted">{item.variant_name}</p> : null}
-                <p className="text-muted">
+                {item.variant_name !== "Default" ? <p className="text-muted-foreground">{item.variant_name}</p> : null}
+                <p className="text-muted-foreground">
                   {item.quantity} × {money(item.unit_price)}
                 </p>
               </div>
@@ -41,18 +41,18 @@ export function OrderDetails({ order }: { order: Order }) {
             </li>
           ))}
         </ul>
-        <dl className="mt-2 space-y-2 border-t border-line pt-4 text-sm">
-          <div className="flex justify-between"><dt className="text-ink-soft">Subtotal</dt><dd className="tabular-nums">{money(order.subtotal)}</dd></div>
-          <div className="flex justify-between"><dt className="text-ink-soft">{order.shipping_method_name}</dt><dd className="tabular-nums">{order.shipping_amount === 0 ? "Free" : money(order.shipping_amount)}</dd></div>
-          <div className="flex justify-between"><dt className="text-ink-soft">Tax</dt><dd className="tabular-nums">{money(order.tax_amount)}</dd></div>
-          <div className="flex justify-between border-t border-line pt-3 text-base font-semibold"><dt>Total</dt><dd className="tabular-nums">{money(order.total_amount)}</dd></div>
+        <dl className="mt-2 space-y-2 border-t border-border pt-4 text-sm">
+          <div className="flex justify-between"><dt className="text-foreground/80">Subtotal</dt><dd className="tabular-nums">{money(order.subtotal)}</dd></div>
+          <div className="flex justify-between"><dt className="text-foreground/80">{order.shipping_method_name}</dt><dd className="tabular-nums">{order.shipping_amount === 0 ? "Free" : money(order.shipping_amount)}</dd></div>
+          <div className="flex justify-between"><dt className="text-foreground/80">Tax</dt><dd className="tabular-nums">{money(order.tax_amount)}</dd></div>
+          <div className="flex justify-between border-t border-border pt-3 text-base font-semibold"><dt>Total</dt><dd className="tabular-nums">{money(order.total_amount)}</dd></div>
         </dl>
       </section>
 
       <aside className="space-y-6">
-        <section className="rounded-card border border-line bg-surface p-6 text-sm">
+        <section className="rounded-3xl border bg-card p-6 shadow-sm text-sm">
           <h2 className="font-semibold">Delivery address</h2>
-          <address className="mt-2 not-italic leading-relaxed text-ink-soft">
+          <address className="mt-2 not-italic leading-relaxed text-foreground/80">
             {a.full_name}<br />
             {a.address_line_1}<br />
             {a.address_line_2 ? <>{a.address_line_2}<br /></> : null}
@@ -61,9 +61,9 @@ export function OrderDetails({ order }: { order: Order }) {
             {a.phone}
           </address>
         </section>
-        <section className="rounded-card border border-line bg-surface p-6 text-sm">
+        <section className="rounded-3xl border bg-card p-6 shadow-sm text-sm">
           <h2 className="font-semibold">Contact</h2>
-          <p className="mt-2 text-ink-soft">{order.email}</p>
+          <p className="mt-2 text-foreground/80">{order.email}</p>
         </section>
       </aside>
     </div>

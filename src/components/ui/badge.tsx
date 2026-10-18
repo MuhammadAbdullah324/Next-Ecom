@@ -1,15 +1,25 @@
-import clsx from "clsx";
-import type { ReactNode } from "react";
-import type { Tone } from "@/features/orders/status";
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-const tones: Record<Tone | "brand", string> = {
-  neutral: "bg-line text-ink-soft",
-  success: "bg-success-soft text-success",
-  warning: "bg-warning-soft text-warning",
-  danger: "bg-danger-soft text-danger",
-  brand: "bg-brand-soft text-brand-strong",
-};
+const badgeVariants = cva("inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-bold", {
+  variants: {
+    variant: {
+      default: "bg-primary text-primary-foreground",
+      secondary: "bg-secondary text-secondary-foreground",
+      outline: "border text-foreground",
+      neutral: "bg-muted text-muted-foreground",
+      success: "bg-success-soft text-success",
+      warning: "bg-warning-soft text-warning",
+      danger: "bg-danger-soft text-danger",
+      brand: "bg-accent text-accent-foreground",
+    },
+  },
+  defaultVariants: { variant: "default" },
+});
 
-export function Badge({ tone = "neutral", children, className }: { tone?: Tone | "brand"; children: ReactNode; className?: string }) {
-  return <span className={clsx("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold", tones[tone], className)}>{children}</span>;
+function Badge({ className, variant, ...props }: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
+  return <span data-slot="badge" className={cn(badgeVariants({ variant }), className)} {...props} />;
 }
+
+export { Badge, badgeVariants };

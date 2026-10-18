@@ -33,8 +33,8 @@ export function PurchasePanel({ variants, compareAt }: { variants: ProductVarian
 
       {names.map((name) => (
         <fieldset key={name}>
-          <legend className="text-sm font-semibold">
-            {name}: <span className="font-normal text-ink-soft">{variant.options[name]}</span>
+          <legend className="font-heading text-sm font-semibold">
+            {name}: <span className="font-normal text-foreground/80">{variant.options[name]}</span>
           </legend>
           <div className="mt-2 flex flex-wrap gap-2">
             {optionValues(variants, name).map((value) => {
@@ -53,9 +53,9 @@ export function PurchasePanel({ variants, compareAt }: { variants: ProductVarian
                     }
                   }}
                   className={clsx(
-                    "min-h-11 rounded-full border px-4 text-sm transition-colors",
-                    selected ? "border-ink bg-ink text-white" : "border-line bg-surface hover:border-ink-soft",
-                    !available && !selected && "text-muted line-through decoration-1",
+                    "min-h-11 min-w-14 rounded-full border-2 px-4 text-sm font-bold transition-colors",
+                    selected ? "border-primary bg-primary text-primary-foreground shadow-sm" : "border-border bg-card hover:border-primary/50",
+                    !available && !selected && "text-muted-foreground line-through decoration-1",
                   )}
                 >
                   {value}

@@ -15,7 +15,7 @@ async function CanceledNotice({ searchParams }: { searchParams: PageProps<"/cart
   const { payment } = await searchParams;
   if (payment !== "canceled") return null;
   return (
-    <Alert tone="info" title="Payment canceled" className="mb-6">
+    <Alert variant="info" title="Payment canceled" className="mb-6">
       You have not been charged. Your cart is saved, so you can check out whenever you&apos;re ready.
     </Alert>
   );
@@ -26,9 +26,9 @@ async function CartContents() {
 
   if (cart.lines.length === 0) {
     return (
-      <div className="rounded-card border border-dashed border-line bg-surface px-6 py-16 text-center">
-        <p className="text-lg font-semibold">Your cart is empty</p>
-        <p className="mt-2 text-sm text-muted">Find something you like and it will show up here.</p>
+      <div className="rounded-3xl border-2 border-dashed bg-card px-6 py-16 text-center">
+        <p className="font-heading text-xl font-semibold">Your cart is empty</p>
+        <p className="mt-2 text-sm text-muted-foreground">Find something you like and it will show up here.</p>
         <ButtonLink href="/products" className="mt-6">Start shopping</ButtonLink>
       </div>
     );
@@ -39,26 +39,26 @@ async function CartContents() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_22rem]">
-      <ul className="divide-y divide-line border-y border-line">
+      <ul className="divide-y divide-border rounded-3xl border bg-card px-4 shadow-sm sm:px-6">
         {cart.lines.map((line) => (
           <CartLineItem key={line.id} line={line} currency={settings.currency} />
         ))}
       </ul>
 
-      <aside aria-labelledby="summary-heading" className="h-fit rounded-card border border-line bg-surface p-6 lg:sticky lg:top-36">
+      <aside aria-labelledby="summary-heading" className="h-fit rounded-3xl border bg-card p-6 shadow-sm lg:sticky lg:top-36">
         <h2 id="summary-heading" className="text-lg font-semibold">Order summary</h2>
         <dl className="mt-4 space-y-2 text-sm">
           <div className="flex justify-between">
-            <dt className="text-ink-soft">Subtotal ({cart.count} {cart.count === 1 ? "item" : "items"})</dt>
+            <dt className="text-foreground/80">Subtotal ({cart.count} {cart.count === 1 ? "item" : "items"})</dt>
             <dd className="font-medium tabular-nums">{formatMoney(cart.subtotal, settings.currency)}</dd>
           </div>
-          <div className="flex justify-between text-ink-soft">
+          <div className="flex justify-between text-foreground/80">
             <dt>Delivery and tax</dt>
             <dd>Calculated at checkout</dd>
           </div>
         </dl>
         {standard?.freeOver != null ? (
-          <p className="mt-4 rounded-xl bg-brand-soft px-3 py-2 text-sm text-brand-strong">
+          <p className="mt-4 rounded-xl bg-accent px-3 py-2 text-sm text-accent-foreground">
             {toFree > 0 ? <>Add {formatMoney(toFree, settings.currency)} more for free standard delivery.</> : <>You get free standard delivery.</>}
           </p>
         ) : null}
@@ -74,7 +74,7 @@ async function CartContents() {
         >
           Go to checkout
         </ButtonLink>
-        <p className="mt-3 text-center text-xs text-muted">No account needed. You can check out as a guest.</p>
+        <p className="mt-3 text-center text-xs text-muted-foreground">No account needed. You can check out as a guest.</p>
       </aside>
     </div>
   );
@@ -83,7 +83,7 @@ async function CartContents() {
 export default function CartPage({ searchParams }: PageProps<"/cart">) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <h1 className="mb-6 text-3xl font-bold tracking-tight">Your cart</h1>
+      <h1 className="mb-6 text-3xl font-semibold tracking-tight sm:text-4xl">Your cart</h1>
       <Suspense fallback={null}>
         <CanceledNotice searchParams={searchParams} />
       </Suspense>

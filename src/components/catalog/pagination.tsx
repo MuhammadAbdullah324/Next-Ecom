@@ -17,25 +17,25 @@ export function Pagination({ base, filters, pageCount }: { base: string; filters
   return (
     <nav aria-label="Pagination" className="mt-10 flex items-center justify-center gap-1">
       {page > 1 ? (
-        <Link href={href(page - 1)} className={clsx(linkClass, "hover:bg-line/60")} rel="prev">
+        <Link href={href(page - 1)} className={clsx(linkClass, "font-semibold hover:bg-muted")} rel="prev">
           Previous
         </Link>
       ) : null}
       {pages.map((p, i) => (
         <span key={p} className="flex items-center">
-          {i > 0 && p - pages[i - 1] > 1 ? <span className="px-1 text-muted" aria-hidden="true">…</span> : null}
+          {i > 0 && p - pages[i - 1] > 1 ? <span className="px-1 text-muted-foreground" aria-hidden="true">…</span> : null}
           <Link
             href={href(p)}
             aria-current={p === page ? "page" : undefined}
             aria-label={`Page ${p}`}
-            className={clsx(linkClass, p === page ? "bg-ink text-white" : "hover:bg-line/60")}
+            className={clsx(linkClass, p === page ? "bg-primary font-bold text-primary-foreground" : "font-semibold hover:bg-muted")}
           >
             {p}
           </Link>
         </span>
       ))}
       {page < pageCount ? (
-        <Link href={href(page + 1)} className={clsx(linkClass, "hover:bg-line/60")} rel="next">
+        <Link href={href(page + 1)} className={clsx(linkClass, "font-semibold hover:bg-muted")} rel="next">
           Next
         </Link>
       ) : null}

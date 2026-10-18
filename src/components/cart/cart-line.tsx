@@ -23,7 +23,7 @@ export function CartLineItem({ line, currency }: { line: CartLine; currency: str
 
   return (
     <li className="flex gap-4 py-6" aria-busy={updating || removing}>
-      <div className="relative size-24 shrink-0 overflow-hidden rounded-xl border border-line bg-surface sm:size-28">
+      <div className="relative size-24 shrink-0 overflow-hidden rounded-2xl border bg-card sm:size-28">
         {line.imageUrl ? <Image src={line.imageUrl} alt={line.imageAlt} fill sizes="112px" className="object-cover" /> : null}
       </div>
       <div className="flex flex-1 flex-col gap-2">
@@ -34,8 +34,8 @@ export function CartLineItem({ line, currency }: { line: CartLine; currency: str
             ) : (
               <p className="font-medium">{line.productName}</p>
             )}
-            {line.hasOptions ? <p className="text-sm text-muted">{line.variantName}</p> : null}
-            <p className="text-sm text-muted">{formatMoney(line.unitPrice, currency)} each</p>
+            {line.hasOptions ? <p className="text-sm text-muted-foreground">{line.variantName}</p> : null}
+            <p className="text-sm text-muted-foreground">{formatMoney(line.unitPrice, currency)} each</p>
           </div>
           <p className="font-semibold tabular-nums">{line.available ? formatMoney(line.unitPrice * line.quantity, currency) : "–"}</p>
         </div>
@@ -48,21 +48,21 @@ export function CartLineItem({ line, currency }: { line: CartLine; currency: str
 
         <div className="mt-auto flex items-center gap-3">
           {line.available && line.stock > 0 ? (
-            <form ref={formRef} action={update} className="inline-flex items-center rounded-full border border-line bg-surface">
+            <form ref={formRef} action={update} className="inline-flex items-center rounded-full border border-border bg-card">
               <input type="hidden" name="variantId" value={line.variantId} />
               <input ref={qtyRef} type="hidden" name="quantity" defaultValue={line.quantity} />
-              <button type="button" className="inline-flex size-11 items-center justify-center text-lg disabled:text-muted" onClick={() => setQuantity(line.quantity > max ? max : line.quantity - 1)} disabled={updating || line.quantity <= 1} aria-label={`Decrease quantity of ${line.productName}`}>
+              <button type="button" className="inline-flex size-11 items-center justify-center text-lg disabled:text-muted-foreground" onClick={() => setQuantity(line.quantity > max ? max : line.quantity - 1)} disabled={updating || line.quantity <= 1} aria-label={`Decrease quantity of ${line.productName}`}>
                 −
               </button>
               <span className="min-w-8 text-center text-sm font-medium tabular-nums" aria-label="Quantity">{line.quantity}</span>
-              <button type="button" className="inline-flex size-11 items-center justify-center text-lg disabled:text-muted" onClick={() => setQuantity(line.quantity + 1)} disabled={updating || line.quantity >= max} aria-label={`Increase quantity of ${line.productName}`}>
+              <button type="button" className="inline-flex size-11 items-center justify-center text-lg disabled:text-muted-foreground" onClick={() => setQuantity(line.quantity + 1)} disabled={updating || line.quantity >= max} aria-label={`Increase quantity of ${line.productName}`}>
                 +
               </button>
             </form>
           ) : null}
           <form action={remove}>
             <input type="hidden" name="variantId" value={line.variantId} />
-            <button type="submit" disabled={removing} className="min-h-11 rounded-full px-3 text-sm text-muted hover:bg-line/60 hover:text-danger">
+            <button type="submit" disabled={removing} className="min-h-11 rounded-full px-3 text-sm text-muted-foreground hover:bg-muted hover:text-danger">
               {removing ? "Removing…" : "Remove"}
             </button>
           </form>

@@ -18,7 +18,7 @@ async function Order({ params }: { params: PageProps<"/orders/[number]">["params
   return (
     <div className="space-y-8">
       {user && !user.isGuest ? (
-        <Link href="/orders" className="text-sm text-muted hover:text-ink">← All orders</Link>
+        <Link href="/orders" className="text-sm text-muted-foreground hover:text-foreground">← All orders</Link>
       ) : null}
       <OutcomeBanner order={order} isGuest={user?.isGuest ?? true} />
       <OrderDetails order={order} />

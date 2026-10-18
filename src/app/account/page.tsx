@@ -23,28 +23,28 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
 
   return (
     <div className="space-y-10">
-      {sp.updated === "password" ? <Alert tone="success">Your password was updated.</Alert> : null}
-      <section className="rounded-card border border-line bg-surface p-6">
+      {sp.updated === "password" ? <Alert variant="success">Your password was updated.</Alert> : null}
+      <section className="rounded-3xl border bg-card p-6 shadow-sm">
         <h2 className="text-lg font-semibold">Profile</h2>
-        <p className="mt-1 text-sm text-muted">Signed in as {user.email}</p>
+        <p className="mt-1 text-sm text-muted-foreground">Signed in as {user.email}</p>
         <div className="mt-4">
           <ProfileForm fullName={profile?.full_name ?? ""} phone={profile?.phone ?? ""} />
         </div>
       </section>
 
-      <section className="rounded-card border border-line bg-surface p-6" aria-labelledby="addresses-heading">
+      <section className="rounded-3xl border bg-card p-6 shadow-sm" aria-labelledby="addresses-heading">
         <h2 id="addresses-heading" className="text-lg font-semibold">Saved addresses</h2>
         {addresses.length === 0 ? (
-          <p className="mt-2 text-sm text-muted">You have no saved addresses yet. Add one below or save one at checkout.</p>
+          <p className="mt-2 text-sm text-muted-foreground">You have no saved addresses yet. Add one below or save one at checkout.</p>
         ) : (
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {addresses.map((a) => (
-              <li key={a.id} className="rounded-xl border border-line p-4 text-sm">
+              <li key={a.id} className="rounded-2xl border p-4 text-sm">
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-medium">{a.label ?? a.full_name}</p>
-                  {a.is_default ? <Badge tone="brand">Default</Badge> : null}
+                  {a.is_default ? <Badge variant="brand">Default</Badge> : null}
                 </div>
-                <p className="mt-1 text-ink-soft">
+                <p className="mt-1 text-foreground/80">
                   {a.full_name}, {a.address_line_1}
                   {a.address_line_2 ? `, ${a.address_line_2}` : ""}, {a.city} {a.postal_code}, {a.country}
                 </p>
@@ -52,7 +52,7 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
                   {!a.is_default ? (
                     <form action={makeDefaultAddress}>
                       <input type="hidden" name="id" value={a.id} />
-                      <button className="min-h-9 rounded-full px-3 text-sm text-brand hover:bg-brand-soft">Make default</button>
+                      <button className="min-h-9 rounded-full px-3 text-sm text-primary hover:bg-accent">Make default</button>
                     </form>
                   ) : null}
                   <form action={deleteAddress}>
@@ -65,7 +65,7 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
           </ul>
         )}
         <details className="mt-6">
-          <summary className="cursor-pointer text-sm font-medium text-brand">+ Add an address</summary>
+          <summary className="cursor-pointer text-sm font-medium text-primary">+ Add an address</summary>
           <div className="mt-4">
             <AddAddressForm />
           </div>
@@ -73,9 +73,9 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
       </section>
 
       <p className="text-sm">
-        <Link href="/orders" className="font-medium text-brand hover:underline">View your orders</Link>
+        <Link href="/orders" className="font-medium text-primary hover:underline">View your orders</Link>
         {" · "}
-        <Link href="/forgot-password" className="text-ink-soft hover:underline">Change password</Link>
+        <Link href="/forgot-password" className="text-foreground/80 hover:underline">Change password</Link>
       </p>
     </div>
   );
@@ -84,7 +84,7 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
 export default function AccountPage({ searchParams }: PageProps<"/account">) {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-      <h1 className="mb-6 text-3xl font-bold tracking-tight">Your account</h1>
+      <h1 className="mb-6 text-3xl font-semibold tracking-tight sm:text-4xl">Your account</h1>
       <Suspense fallback={<Skeleton className="h-96" />}>
         <Account searchParams={searchParams} />
       </Suspense>
