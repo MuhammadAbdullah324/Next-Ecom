@@ -13,7 +13,7 @@ async function Content({ searchParams }: { searchParams: PageProps<"/sign-up">["
     <AuthCard
       title="Create an account"
       subtitle="Save addresses, check out faster and see your order history."
-      footer={<>Already have an account? <Link href={`/sign-in?next=${encodeURIComponent(next)}`} className="font-medium text-primary hover:underline">Sign in</Link></>}
+      footer={<>Already have an account? <Link href={`/sign-in?next=${encodeURIComponent(next)}`} className="font-medium underline underline-offset-4 hover:text-muted-foreground">Sign in</Link></>}
     >
       <GoogleButton next={next} />
       <Divider />

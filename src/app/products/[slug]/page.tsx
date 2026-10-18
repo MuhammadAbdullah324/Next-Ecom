@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import { getAllProductSlugs, getProduct, getRelatedProducts } from "@/features/catalog/queries";
 import { Gallery } from "@/components/catalog/gallery";
 import { PurchasePanel } from "@/components/catalog/purchase-panel";
@@ -31,7 +32,7 @@ async function Related({ category, slug }: { category: string; slug: string }) {
 function ProductSkeleton() {
   return (
     <div className="mx-auto mt-10 grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2" aria-busy="true" aria-label="Loading product">
-      <Skeleton className="aspect-square w-full rounded-2xl" />
+      <Skeleton className="aspect-[4/5] w-full rounded-xl" />
       <div className="space-y-4">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-9 w-3/4" />
@@ -64,18 +65,19 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
         <Link href={`/category/${product.category.slug}`} className="hover:text-foreground">{product.category.name}</Link>
       </nav>
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-2">
+      <div className="mt-6 grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
         <Gallery images={product.images} name={product.name} />
         <div>
-          {product.brand ? <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">{product.brand}</p> : null}
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">{product.name}</h1>
-          {product.short_description ? <p className="mt-3 text-lg text-foreground/80">{product.short_description}</p> : null}
+          {product.brand ? <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{product.brand}</p> : null}
+          <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{product.name}</h1>
+          {product.short_description ? <p className="mt-3 text-base leading-relaxed text-muted-foreground">{product.short_description}</p> : null}
           <div className="mt-6">
             <PurchasePanel variants={product.variants} compareAt={product.compare_at_price} />
           </div>
-          <ul className="mt-8 space-y-2 border-t border-border pt-6 text-sm text-foreground/80">
-            <li>Free standard delivery on orders over $75</li>
-            <li>Secure checkout with Stripe</li>
+          <ul className="mt-8 divide-y divide-border border-y border-border text-sm">
+            <li className="flex items-center gap-3 py-3"><Truck aria-hidden strokeWidth={1.5} className="size-5" />Free standard delivery on orders over $75</li>
+            <li className="flex items-center gap-3 py-3"><RotateCcw aria-hidden strokeWidth={1.5} className="size-5" />Easy 30-day returns</li>
+            <li className="flex items-center gap-3 py-3"><ShieldCheck aria-hidden strokeWidth={1.5} className="size-5" />Secure checkout with Stripe</li>
           </ul>
         </div>
       </div>
@@ -84,15 +86,15 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
         {product.description ? (
           <section>
             <h2 className="text-xl font-semibold">About this product</h2>
-            <p className="mt-3 leading-relaxed text-foreground/80">{product.description}</p>
+            <p className="mt-3 leading-relaxed text-muted-foreground">{product.description}</p>
           </section>
         ) : null}
         {specs.length > 0 ? (
           <section>
             <h2 className="text-xl font-semibold">Specifications</h2>
-            <dl className="mt-3 divide-y divide-border rounded-3xl border bg-card shadow-sm">
+            <dl className="mt-3 divide-y divide-border border-y border-border">
               {specs.map(([key, value]) => (
-                <div key={key} className="grid grid-cols-2 gap-4 px-4 py-3 text-sm">
+                <div key={key} className="grid grid-cols-2 gap-4 py-3 text-sm">
                   <dt className="text-muted-foreground">{key}</dt>
                   <dd>{value}</dd>
                 </div>
@@ -102,8 +104,8 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
         ) : null}
       </div>
 
-      <section className="mt-16" aria-labelledby="related-heading">
-        <h2 id="related-heading" className="mb-6 text-xl font-semibold">You may also like</h2>
+      <section className="mt-20" aria-labelledby="related-heading">
+        <h2 id="related-heading" className="mb-8 text-2xl font-semibold">You may also like</h2>
         <Suspense fallback={<ProductGridSkeleton count={4} />}>
           <Related category={product.category.slug} slug={product.slug} />
         </Suspense>

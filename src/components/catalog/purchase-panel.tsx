@@ -33,8 +33,8 @@ export function PurchasePanel({ variants, compareAt }: { variants: ProductVarian
 
       {names.map((name) => (
         <fieldset key={name}>
-          <legend className="font-heading text-sm font-semibold">
-            {name}: <span className="font-normal text-foreground/80">{variant.options[name]}</span>
+          <legend className="text-sm font-semibold">
+            {name}: <span className="font-normal text-muted-foreground">{variant.options[name]}</span>
           </legend>
           <div className="mt-2 flex flex-wrap gap-2">
             {optionValues(variants, name).map((value) => {
@@ -53,8 +53,8 @@ export function PurchasePanel({ variants, compareAt }: { variants: ProductVarian
                     }
                   }}
                   className={clsx(
-                    "min-h-11 min-w-14 rounded-full border-2 px-4 text-sm font-bold transition-colors",
-                    selected ? "border-primary bg-primary text-primary-foreground shadow-sm" : "border-border bg-card hover:border-primary/50",
+                    "min-h-11 min-w-14 rounded-md border px-4 text-sm font-medium transition-colors",
+                    selected ? "border-foreground bg-foreground text-background" : "border-input bg-card hover:border-foreground",
                     !available && !selected && "text-muted-foreground line-through decoration-1",
                   )}
                 >
@@ -72,7 +72,7 @@ export function PurchasePanel({ variants, compareAt }: { variants: ProductVarian
         <input type="hidden" name="quantity" value={quantity} />
         <div className="flex flex-wrap items-center gap-3">
           <QuantityStepper value={quantity} max={maxQuantity} onChange={setQuantity} disabled={soldOut} label="Quantity" />
-          <SubmitButton size="lg" className="flex-1 sm:flex-none sm:min-w-56" disabled={soldOut} pendingLabel="Adding…">
+          <SubmitButton size="lg" className="flex-1" disabled={soldOut} pendingLabel="Adding…">
             {soldOut ? "Out of stock" : "Add to cart"}
           </SubmitButton>
         </div>

@@ -19,7 +19,7 @@ async function OrderList() {
 
   if (orders.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-border bg-card px-6 py-16 text-center">
+      <div className="rounded-lg border border-dashed border-border bg-card px-6 py-16 text-center">
         <p className="text-lg font-semibold">No orders yet</p>
         <p className="mt-2 text-sm text-muted-foreground">When you place an order, it will show up here.</p>
         <ButtonLink href="/products" className="mt-6">Start shopping</ButtonLink>
@@ -28,7 +28,7 @@ async function OrderList() {
   }
 
   return (
-    <ul className="divide-y divide-border rounded-3xl border bg-card shadow-sm">
+    <ul className="divide-y divide-border rounded-xl border bg-card">
       {orders.map((order) => {
         const outcome = describeOrder(order);
         const count = order.items.reduce((n, i) => n + i.quantity, 0);

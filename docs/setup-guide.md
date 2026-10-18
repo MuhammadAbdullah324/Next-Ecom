@@ -62,3 +62,5 @@ npm install
 cp .env.example .env.local   # then fill in the values from steps 3 and 4
 npm run dev                  # open http://localhost:3000
 ```
+
+After every `git pull`, run `npm install` again before `npm run dev`. New UI packages are added from time to time, and without them the page falls back to an old, unstyled look. If styles still look stale, stop the dev server, delete the `.next` folder and start it again.

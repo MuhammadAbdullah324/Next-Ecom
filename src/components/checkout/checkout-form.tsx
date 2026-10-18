@@ -47,14 +47,14 @@ export function CheckoutForm({ isGuest, email, addresses, methods, lines, subtot
             <h2 id="contact-heading" className="text-lg font-semibold">1. Contact</h2>
             {isGuest ? (
               <p className="text-sm text-muted-foreground">
-                Have an account? <Link href="/sign-in?next=/checkout" className="font-medium text-primary hover:underline">Sign in</Link>
+                Have an account? <Link href="/sign-in?next=/checkout" className="font-medium underline underline-offset-4 hover:text-muted-foreground">Sign in</Link>
               </p>
             ) : null}
           </div>
           {isGuest ? (
             <Field label="Email" name="email" type="email" autoComplete="email" required error={err.email} hint="We'll send your order confirmation here." />
           ) : (
-            <p className="rounded-2xl border bg-card px-4 py-3 text-sm">
+            <p className="rounded-lg border bg-card px-4 py-3 text-sm">
               Confirmation goes to <strong>{email}</strong>
             </p>
           )}
@@ -67,7 +67,7 @@ export function CheckoutForm({ isGuest, email, addresses, methods, lines, subtot
             <fieldset className="space-y-3">
               <legend className="sr-only">Choose a saved address</legend>
               {addresses.map((a, i) => (
-                <label key={a.id} className={clsx("flex cursor-pointer gap-3 rounded-2xl border bg-card p-4 text-sm", mode === "saved" ? "has-checked:border-primary has-checked:ring-2 has-checked:ring-primary/25 has-checked:bg-accent/40" : "border-border")}>
+                <label key={a.id} className={clsx("flex cursor-pointer gap-3 rounded-lg border bg-card p-4 text-sm", mode === "saved" ? "has-checked:border-foreground has-checked:ring-1 has-checked:ring-foreground" : "border-border")}>
                   <input type="radio" name="savedAddressId" value={a.id} defaultChecked={i === 0} onChange={() => setMode("saved")} className="mt-1 size-4 accent-primary" />
                   <span>
                     <span className="font-medium">{a.label ? `${a.label}: ` : ""}{a.full_name}</span>
@@ -78,14 +78,14 @@ export function CheckoutForm({ isGuest, email, addresses, methods, lines, subtot
                   </span>
                 </label>
               ))}
-              <button type="button" onClick={() => setMode(mode === "new" ? "saved" : "new")} className="text-sm font-medium text-primary hover:underline" aria-expanded={mode === "new"}>
+              <button type="button" onClick={() => setMode(mode === "new" ? "saved" : "new")} className="text-sm font-medium underline underline-offset-4 hover:text-muted-foreground" aria-expanded={mode === "new"}>
                 {mode === "new" ? "Use a saved address" : "+ Deliver to a new address"}
               </button>
             </fieldset>
           ) : null}
 
           {mode === "new" ? (
-            <div className="grid gap-4 rounded-3xl border bg-card shadow-sm p-4 sm:grid-cols-2 sm:p-6">
+            <div className="grid gap-4 rounded-xl border bg-card p-4 sm:grid-cols-2 sm:p-6">
               <Field label="Full name" name="full_name" autoComplete="name" required error={err.full_name} className="sm:col-span-2" />
               <Field label="Phone" name="phone" type="tel" autoComplete="tel" required error={err.phone} className="sm:col-span-2" hint="For delivery updates only." />
               <Field label="Address" name="address_line_1" autoComplete="address-line1" required error={err.address_line_1} className="sm:col-span-2" />
@@ -111,7 +111,7 @@ export function CheckoutForm({ isGuest, email, addresses, methods, lines, subtot
             {methods.map((m) => {
               const cost = orderTotals(subtotal, m, 0).shipping;
               return (
-                <label key={m.code} className="flex cursor-pointer items-start justify-between gap-3 rounded-2xl border bg-card p-4 text-sm has-checked:border-primary has-checked:ring-2 has-checked:ring-primary/25 has-checked:bg-accent/40">
+                <label key={m.code} className="flex cursor-pointer items-start justify-between gap-3 rounded-lg border bg-card p-4 text-sm has-checked:border-foreground has-checked:ring-1 has-checked:ring-foreground">
                   <span className="flex gap-3">
                     <input type="radio" name="shippingMethod" value={m.code} checked={methodCode === m.code} onChange={() => setMethodCode(m.code)} className="mt-1 size-4 accent-primary" />
                     <span>
@@ -128,7 +128,7 @@ export function CheckoutForm({ isGuest, email, addresses, methods, lines, subtot
         </section>
       </div>
 
-      <aside aria-labelledby="checkout-summary" className="h-fit rounded-3xl border bg-card p-6 shadow-sm lg:sticky lg:top-36">
+      <aside aria-labelledby="checkout-summary" className="h-fit rounded-xl bg-muted p-6 lg:sticky lg:top-36">
         <h2 id="checkout-summary" className="text-lg font-semibold">Order summary</h2>
         <ul className="mt-4 space-y-3">
           {lines.map((line) => (

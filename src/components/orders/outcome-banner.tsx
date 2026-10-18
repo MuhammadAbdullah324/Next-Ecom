@@ -24,7 +24,7 @@ export function OutcomeBanner({ order, isGuest }: { order: Order; isGuest: boole
   }[outcome.key];
 
   return (
-    <div className={`rounded-2xl px-6 py-6 ${styles}`} role="status">
+    <div className={`rounded-lg px-6 py-6 ${styles}`} role="status">
       {outcome.key === "awaiting_payment" ? <AutoRefresh /> : null}
       <h1 className="text-2xl font-semibold tracking-tight">{heading}</h1>
       <p className="mt-2 text-foreground/80">{outcome.description}</p>
