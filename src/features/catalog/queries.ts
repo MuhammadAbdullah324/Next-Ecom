@@ -24,7 +24,7 @@ function toListing(row: Record<string, unknown>): ProductListing {
 
 export async function getCategories(): Promise<Category[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
   cacheTag(CATALOG_TAG);
 
   const { data, error } = await createPublicClient()
@@ -85,7 +85,7 @@ export async function getNewArrivals(limit = 4): Promise<ProductListing[]> {
 
 export async function getBrands(categorySlug?: string): Promise<string[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
   cacheTag(CATALOG_TAG);
 
   let query = createPublicClient().from("product_listings").select("brand");
@@ -206,7 +206,7 @@ export async function getRelatedProducts(categorySlug: string, excludeSlug: stri
 
 export async function getAllProductSlugs(): Promise<string[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
   cacheTag(CATALOG_TAG);
 
   const { data, error } = await createPublicClient().from("product_listings").select("slug").eq("is_featured", true);

@@ -24,7 +24,7 @@ export type SavedAddress = {
 
 export async function getStoreSettings(): Promise<StoreSettings> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
   cacheTag(CATALOG_TAG);
   const { data, error } = await createPublicClient().from("store_settings").select("store_name, currency, tax_rate").single();
   if (error) throw new Error(`Could not load store settings: ${error.message}`);
@@ -33,7 +33,7 @@ export async function getStoreSettings(): Promise<StoreSettings> {
 
 export async function getShippingMethods(): Promise<ShippingMethod[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
   cacheTag(CATALOG_TAG);
   const { data, error } = await createPublicClient()
     .from("shipping_methods")

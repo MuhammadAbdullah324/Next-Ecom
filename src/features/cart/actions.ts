@@ -26,8 +26,10 @@ export async function addToCart(_: CartActionState, formData: FormData): Promise
     });
     if (error) return { error: userMessage(error) };
   } catch (e) {
-    console.error(e);
-    return { error: "We couldn't reach the store. Please try again." };
+    console.error("addToCart failed", e);
+    // In development, show the cause (for example anonymous sign-ins switched off in Supabase).
+    const detail = process.env.NODE_ENV === "development" && e instanceof Error ? ` (${e.message})` : "";
+    return { error: `We couldn't reach the store. Please try again.${detail}` };
   }
 
   refresh();
