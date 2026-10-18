@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0f172a;
+  --color-ink-soft: #334155;
+  --color-muted: #64748b;
+  --color-line: #e2e8f0;
+  --color-surface: #ffffff;
+  --color-canvas: #f8fafc;
+  --color-brand: #0f766e;
+  --color-brand-strong: #115e59;
+  --color-brand-soft: #ccfbf1;
+  --color-success: #15803d;
+  --color-success-soft: #dcfce7;
+  --color-warning: #b45309;
+  --color-warning-soft: #fef3c7;
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fee2e2;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 1rem;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+/* Visible focus for keyboard users everywhere. */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
