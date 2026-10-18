@@ -25,13 +25,14 @@ export default async function HomePage() {
 
       {hero ? (
         <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-6">
-          <div className="relative overflow-hidden rounded-card bg-ink text-white">
-            {hero.image_url ? <Image src={hero.image_url} alt="" fill priority sizes="100vw" className="object-cover opacity-30" /> : null}
+          <div className="relative overflow-hidden rounded-card bg-brand text-white">
+            {hero.image_url ? <Image src={hero.image_url} alt="" fill priority sizes="100vw" className="object-cover object-right" /> : null}
+            <div className="absolute inset-0 bg-linear-to-r from-brand via-brand/80 to-transparent" aria-hidden />
             <div className="relative max-w-xl px-6 py-16 sm:px-12 sm:py-24">
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{hero.title}</h1>
               {hero.subtitle ? <p className="mt-4 text-lg text-white/80">{hero.subtitle}</p> : null}
               {hero.cta_href ? (
-                <ButtonLink href={hero.cta_href} size="lg" className="mt-8 bg-white text-ink hover:bg-brand-soft">
+                <ButtonLink href={hero.cta_href} size="lg" variant="secondary" className="mt-8 border-white">
                   {hero.cta_label ?? "Shop now"}
                 </ButtonLink>
               ) : null}
@@ -45,8 +46,13 @@ export default async function HomePage() {
         <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
           {categories.map((c) => (
             <li key={c.id}>
-              <Link href={`/category/${c.slug}`} className="flex min-h-20 items-center justify-center rounded-card border border-line bg-surface px-3 text-center text-sm font-medium hover:border-brand hover:text-brand">
-                {c.name}
+              <Link href={`/category/${c.slug}`} className="group block overflow-hidden rounded-card border border-line bg-surface text-center text-sm font-medium hover:border-brand hover:text-brand">
+                {c.image_url ? (
+                  <span className="relative block aspect-[3/2]">
+                    <Image src={c.image_url} alt="" fill sizes="(min-width: 1024px) 14vw, (min-width: 640px) 25vw, 50vw" className="object-cover transition-transform group-hover:scale-105" />
+                  </span>
+                ) : null}
+                <span className="block px-3 py-3">{c.name}</span>
               </Link>
             </li>
           ))}

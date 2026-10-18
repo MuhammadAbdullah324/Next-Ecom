@@ -1,6 +1,6 @@
 -- Tiny Threads: seed data for a kids' clothing store.
--- Run after the migration. Image URLs are placeholders (placehold.co); replace them with
--- uploads to a public Supabase Storage bucket such as `product-images`.
+-- Run after the migration. Pictures are drawings in public/images; replace them with real photos,
+-- for example uploads to a public Supabase Storage bucket such as `product-images`.
 -- Already seeded the earlier accessories catalog? Run replace-catalog.sql first.
 
 insert into public.store_settings (id, store_name, currency, tax_rate)
@@ -23,7 +23,7 @@ insert into public.categories (name, slug, description, sort_order) values
 on conflict (slug) do nothing;
 
 update public.categories
-set image_url = 'https://placehold.co/600x400/png?text=' || replace(name, ' ', '+')
+set image_url = '/images/categories/' || slug || '.jpg'
 where image_url is null;
 
 -- Products: (category slug, name, slug, brand, short description, description, price, compare_at, featured, specs)
@@ -97,10 +97,10 @@ from (values
 join public.categories c on c.slug = v.category_slug
 on conflict (slug) do nothing;
 
--- Images: two per product, placeholder URLs labelled with the product name.
+-- Images: two drawings per product, served from public/images/products (see scripts/generate-images.mjs).
 insert into public.product_images (product_id, url, alt_text, sort_order)
 select p.id,
-       'https://placehold.co/800x800/png?text=' || replace(p.name, ' ', '+') || case when n = 2 then '+(back)' else '' end,
+       '/images/products/' || p.slug || '-' || n || '.jpg',
        p.name || case when n = 2 then ', alternate view' else '' end,
        n
 from public.products p
@@ -164,9 +164,9 @@ on conflict (sku) do nothing;
 insert into public.promotions (placement, title, subtitle, cta_label, cta_href, image_url, sort_order)
 select * from (values
   ('hero',   'Made for play', 'Soft, tough clothes for climbing, splashing and everything in between.', 'Shop new arrivals', '/products',
-   'https://placehold.co/1600x700/png?text=Made+for+play', 1),
+   '/images/banners/made-for-play.jpg', 1),
   ('hero',   'Rain or shine', 'Waterproof jackets and light-up sneakers now up to 20% off.', 'Shop outerwear', '/category/outerwear',
-   'https://placehold.co/1600x700/png?text=Rain+or+shine', 2),
+   '/images/banners/rain-or-shine.jpg', 2),
   ('banner', 'Free standard delivery over $75', 'Applied automatically at checkout.', null, null, null, 1)
 ) as v(placement, title, subtitle, cta_label, cta_href, image_url, sort_order)
 where not exists (select 1 from public.promotions);
