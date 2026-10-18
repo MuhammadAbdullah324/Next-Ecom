@@ -24,7 +24,7 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
   return (
     <div className="space-y-10">
       {sp.updated === "password" ? <Alert variant="success">Your password was updated.</Alert> : null}
-      <section className="rounded-3xl border bg-card p-6 shadow-sm">
+      <section className="rounded-xl border bg-card p-6">
         <h2 className="text-lg font-semibold">Profile</h2>
         <p className="mt-1 text-sm text-muted-foreground">Signed in as {user.email}</p>
         <div className="mt-4">
@@ -32,14 +32,14 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
         </div>
       </section>
 
-      <section className="rounded-3xl border bg-card p-6 shadow-sm" aria-labelledby="addresses-heading">
+      <section className="rounded-xl border bg-card p-6" aria-labelledby="addresses-heading">
         <h2 id="addresses-heading" className="text-lg font-semibold">Saved addresses</h2>
         {addresses.length === 0 ? (
           <p className="mt-2 text-sm text-muted-foreground">You have no saved addresses yet. Add one below or save one at checkout.</p>
         ) : (
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {addresses.map((a) => (
-              <li key={a.id} className="rounded-2xl border p-4 text-sm">
+              <li key={a.id} className="rounded-lg border p-4 text-sm">
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-medium">{a.label ?? a.full_name}</p>
                   {a.is_default ? <Badge variant="brand">Default</Badge> : null}
@@ -52,12 +52,12 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
                   {!a.is_default ? (
                     <form action={makeDefaultAddress}>
                       <input type="hidden" name="id" value={a.id} />
-                      <button className="min-h-9 rounded-full px-3 text-sm text-primary hover:bg-accent">Make default</button>
+                      <button className="min-h-9 rounded-md px-3 text-sm underline-offset-4 hover:underline">Make default</button>
                     </form>
                   ) : null}
                   <form action={deleteAddress}>
                     <input type="hidden" name="id" value={a.id} />
-                    <button className="min-h-9 rounded-full px-3 text-sm text-danger hover:bg-danger-soft" aria-label={`Delete address ${a.label ?? a.address_line_1}`}>Delete</button>
+                    <button className="min-h-9 rounded-md px-3 text-sm text-danger underline-offset-4 hover:underline" aria-label={`Delete address ${a.label ?? a.address_line_1}`}>Delete</button>
                   </form>
                 </div>
               </li>
@@ -65,7 +65,7 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
           </ul>
         )}
         <details className="mt-6">
-          <summary className="cursor-pointer text-sm font-medium text-primary">+ Add an address</summary>
+          <summary className="cursor-pointer text-sm font-medium underline underline-offset-4">+ Add an address</summary>
           <div className="mt-4">
             <AddAddressForm />
           </div>
@@ -73,7 +73,7 @@ async function Account({ searchParams }: { searchParams: PageProps<"/account">["
       </section>
 
       <p className="text-sm">
-        <Link href="/orders" className="font-medium text-primary hover:underline">View your orders</Link>
+        <Link href="/orders" className="font-medium underline underline-offset-4 hover:text-muted-foreground">View your orders</Link>
         {" · "}
         <Link href="/forgot-password" className="text-foreground/80 hover:underline">Change password</Link>
       </p>

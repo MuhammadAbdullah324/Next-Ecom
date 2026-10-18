@@ -14,7 +14,7 @@ export function OrderDetails({ order }: { order: Order }) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
-      <section aria-labelledby="items-heading" className="rounded-3xl border bg-card p-6 shadow-sm">
+      <section aria-labelledby="items-heading" className="rounded-xl border bg-card p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="items-heading" className="text-lg font-semibold">Order {order.order_number}</h2>
           <Badge variant={outcome.tone}>{outcome.label}</Badge>
@@ -50,7 +50,7 @@ export function OrderDetails({ order }: { order: Order }) {
       </section>
 
       <aside className="space-y-6">
-        <section className="rounded-3xl border bg-card p-6 shadow-sm text-sm">
+        <section className="rounded-xl border bg-card p-6 text-sm">
           <h2 className="font-semibold">Delivery address</h2>
           <address className="mt-2 not-italic leading-relaxed text-foreground/80">
             {a.full_name}<br />
@@ -61,7 +61,7 @@ export function OrderDetails({ order }: { order: Order }) {
             {a.phone}
           </address>
         </section>
-        <section className="rounded-3xl border bg-card p-6 shadow-sm text-sm">
+        <section className="rounded-xl border bg-card p-6 text-sm">
           <h2 className="font-semibold">Contact</h2>
           <p className="mt-2 text-foreground/80">{order.email}</p>
         </section>

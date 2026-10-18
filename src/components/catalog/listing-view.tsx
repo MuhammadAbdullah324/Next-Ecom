@@ -31,17 +31,17 @@ export async function ListingView({
       {!category && filters.category ? <input type="hidden" name="category" value={filters.category} /> : null}
 
       <aside aria-label="Filters">
-        <details className="rounded-2xl border bg-card p-4 shadow-sm lg:hidden">
+        <details className="rounded-lg border bg-card p-4 lg:hidden">
           <summary className="cursor-pointer text-sm font-semibold">Filters</summary>
           <div className="mt-4">
             <FilterFields filters={filters} brands={brands} />
             <button type="submit" className={buttonVariants({ className: "mt-6 w-full" })}>Apply filters</button>
           </div>
         </details>
-        <div className="sticky top-36 hidden rounded-2xl border bg-card p-5 shadow-sm lg:block">
+        <div className="sticky top-36 hidden lg:block">
           <FilterFields filters={filters} brands={brands} />
           <div className="mt-6 flex gap-2">
-            <button type="submit" className={buttonVariants({ size: "sm" })}>Apply</button>
+            <button type="submit" className={buttonVariants({ size: "sm", className: "flex-1" })}>Apply</button>
             {filtered ? <Link href={clearHref} className={buttonVariants({ variant: "ghost", size: "sm" })}>Clear</Link> : null}
           </div>
         </div>
@@ -57,8 +57,8 @@ export async function ListingView({
         </div>
 
         {result.products.length === 0 ? (
-          <div className="rounded-3xl border-2 border-dashed bg-card px-6 py-16 text-center">
-            <p className="font-heading text-xl font-semibold">No products match</p>
+          <div className="rounded-xl bg-muted px-6 py-20 text-center">
+            <p className="text-xl font-semibold">No products match</p>
             <p className="mt-2 text-sm text-muted-foreground">Try removing a filter or searching for something else.</p>
             <Link href={filtered ? listingHref(base, {}) : "/products"} className={buttonVariants({ variant: "outline", className: "mt-6" })}>
               {filtered ? "Clear filters" : "See all products"}

@@ -9,47 +9,60 @@ const promises = [
   { icon: ShieldCheck, title: "Secure checkout", text: "Payments handled by Stripe." },
 ];
 
+const columns = [
+  {
+    title: "Shop",
+    links: [
+      { href: "/products", label: "All products" },
+      { href: "/products?sort=newest", label: "New arrivals" },
+      { href: "/category/baby", label: "Baby" },
+      { href: "/category/sleepwear", label: "Sleepwear" },
+    ],
+  },
+  {
+    title: "Help",
+    links: [
+      { href: "/orders", label: "Track an order" },
+      { href: "/account", label: "Your account" },
+      { href: "/cart", label: "Cart" },
+    ],
+  },
+];
+
 export function Footer() {
   return (
-    <footer className="mt-20">
-      <div className="border-y border-border/70 bg-secondary/60">
-        <ul className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+    <footer className="mt-24">
+      <div className="border-y border-border">
+        <ul className="mx-auto grid max-w-7xl gap-x-6 gap-y-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
           {promises.map(({ icon: Icon, title, text }) => (
             <li key={title} className="flex items-start gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-card text-primary shadow-sm">
-                <Icon aria-hidden className="size-5" />
-              </span>
+              <Icon aria-hidden strokeWidth={1.5} className="mt-0.5 size-6 shrink-0" />
               <div>
-                <p className="font-heading font-semibold">{title}</p>
-                <p className="text-sm text-muted-foreground">{text}</p>
+                <p className="text-sm font-semibold">{title}</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">{text}</p>
               </div>
             </li>
           ))}
         </ul>
       </div>
-      <div className="bg-card">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 text-sm sm:grid-cols-[2fr_1fr_1fr] sm:px-6">
+      <div className="bg-sand">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 text-sm sm:grid-cols-[2fr_1fr_1fr] sm:px-6">
           <div className="space-y-3">
             <Logo />
             <p className="max-w-xs text-muted-foreground">Soft, durable clothes for babies and kids, from newborn to 8 years. Made for climbing, splashing and everything in between.</p>
           </div>
-          <div>
-            <p className="font-heading font-semibold">Shop</p>
-            <ul className="mt-3 space-y-2 text-muted-foreground">
-              <li><Link href="/products" className="hover:text-primary">All products</Link></li>
-              <li><Link href="/products?sort=newest" className="hover:text-primary">New arrivals</Link></li>
-              <li><Link href="/cart" className="hover:text-primary">Cart</Link></li>
-            </ul>
-          </div>
-          <div>
-            <p className="font-heading font-semibold">Help</p>
-            <ul className="mt-3 space-y-2 text-muted-foreground">
-              <li><Link href="/orders" className="hover:text-primary">Track an order</Link></li>
-              <li><Link href="/account" className="hover:text-primary">Your account</Link></li>
-            </ul>
-          </div>
+          {columns.map((col) => (
+            <div key={col.title}>
+              <p className="text-xs font-semibold uppercase tracking-widest">{col.title}</p>
+              <ul className="mt-4 space-y-2.5 text-muted-foreground">
+                {col.links.map((l) => (
+                  <li key={l.href}><Link href={l.href} className="transition-colors hover:text-foreground">{l.label}</Link></li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-        <p className="border-t border-border/70 py-5 text-center text-xs text-muted-foreground">© Tiny Threads. Photos from Unsplash.</p>
+        <p className="mx-auto max-w-7xl border-t border-foreground/10 px-4 py-6 text-xs text-muted-foreground sm:px-6">© Tiny Threads. Photos from Unsplash.</p>
       </div>
     </footer>
   );

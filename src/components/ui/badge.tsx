@@ -2,10 +2,11 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const badgeVariants = cva("inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-bold", {
+const badgeVariants = cva("inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-sm px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide", {
   variants: {
     variant: {
       default: "bg-primary text-primary-foreground",
+      sale: "bg-sale text-white",
       secondary: "bg-secondary text-secondary-foreground",
       outline: "border text-foreground",
       neutral: "bg-muted text-muted-foreground",

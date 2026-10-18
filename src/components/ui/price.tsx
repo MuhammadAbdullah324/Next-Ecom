@@ -18,17 +18,17 @@ export function Price({
   const percent = onSale ? Math.round(((compareAt - amount) / compareAt) * 100) : 0;
   return (
     <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-      <span className={size === "lg" ? "font-heading text-3xl font-semibold" : "font-bold"}>
+      <span className={`${size === "lg" ? "text-2xl font-semibold" : "text-sm font-medium"} ${onSale ? "text-sale" : ""}`}>
         {from ? <span className="text-sm font-normal text-muted-foreground">From </span> : null}
         {formatMoney(amount, currency)}
       </span>
       {onSale ? (
         <>
-          <span className="text-sm text-muted-foreground line-through">
+          <span className={`${size === "lg" ? "text-base" : "text-sm"} text-muted-foreground line-through`}>
             <span className="sr-only">Was </span>
             {formatMoney(compareAt, currency)}
           </span>
-          <span className="rounded-full bg-danger-soft px-2 py-0.5 text-xs font-bold text-danger">−{percent}%</span>
+          <span className="text-xs font-medium text-sale">−{percent}%</span>
         </>
       ) : null}
     </div>

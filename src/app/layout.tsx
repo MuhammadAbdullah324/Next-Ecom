@@ -5,16 +5,10 @@ import { Footer } from "@/components/layout/footer";
 import "./globals.css";
 
 // Self-hosted from @fontsource so builds don't depend on Google Fonts.
-const display = localFont({
-  src: "../../node_modules/@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2",
-  variable: "--font-display",
-  weight: "300 700",
-  display: "swap",
-});
-const body = localFont({
-  src: "../../node_modules/@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2",
-  variable: "--font-body",
-  weight: "200 1000",
+const inter = localFont({
+  src: "../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+  variable: "--font-inter",
+  weight: "100 900",
   display: "swap",
 });
 
@@ -25,9 +19,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-card focus:px-4 focus:py-2">
+        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-card focus:px-4 focus:py-2">
           Skip to content
         </a>
         <Header />

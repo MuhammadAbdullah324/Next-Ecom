@@ -12,7 +12,7 @@ export function Pagination({ base, filters, pageCount }: { base: string; filters
   const page = Math.min(filters.page, pageCount);
   const href = (p: number) => listingHref(base, { ...filters, page: p });
   const pages = pagesToShow(page, pageCount);
-  const linkClass = "inline-flex min-h-11 min-w-11 items-center justify-center rounded-full px-3 text-sm";
+  const linkClass = "inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-3 text-sm";
 
   return (
     <nav aria-label="Pagination" className="mt-10 flex items-center justify-center gap-1">
@@ -28,7 +28,7 @@ export function Pagination({ base, filters, pageCount }: { base: string; filters
             href={href(p)}
             aria-current={p === page ? "page" : undefined}
             aria-label={`Page ${p}`}
-            className={clsx(linkClass, p === page ? "bg-primary font-bold text-primary-foreground" : "font-semibold hover:bg-muted")}
+            className={clsx(linkClass, p === page ? "bg-primary font-semibold text-primary-foreground" : "font-medium hover:bg-muted")}
           >
             {p}
           </Link>

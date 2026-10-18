@@ -16,7 +16,7 @@ async function CartLink() {
     <ButtonLink href="/cart" variant="ghost" size="icon" className="relative" aria-label={`Cart, ${count} ${count === 1 ? "item" : "items"}`}>
       <ShoppingBag aria-hidden className="size-5" />
       {count > 0 ? (
-        <span className="absolute -right-0.5 -top-0.5 grid min-w-5 place-items-center rounded-full bg-primary px-1 text-[11px] font-bold leading-5 text-primary-foreground ring-2 ring-card">
+        <span className="absolute right-0.5 top-0.5 grid min-w-[18px] place-items-center rounded-full bg-sale px-1 text-[10px] font-semibold leading-[18px] text-white">
           {count > 99 ? "99+" : count}
         </span>
       ) : null}
@@ -28,9 +28,9 @@ async function AccountLinks() {
   const user = await getCurrentUser();
   if (!user || user.isGuest) {
     return (
-      <ButtonLink href="/sign-in" variant="ghost" className="px-3">
-        <UserRound aria-hidden />
-        Sign in
+      <ButtonLink href="/sign-in" variant="ghost" className="px-3" aria-label="Sign in">
+        <UserRound aria-hidden className="size-5" />
+        <span className="hidden sm:inline">Sign in</span>
       </ButtonLink>
     );
   }
@@ -39,16 +39,16 @@ async function AccountLinks() {
 
 async function CategoryNav() {
   const categories = await getCategories();
-  const pill = "block whitespace-nowrap rounded-full px-3.5 py-1.5 font-semibold text-foreground/80 transition-colors hover:bg-secondary hover:text-secondary-foreground";
+  const link = "block whitespace-nowrap border-b-2 border-transparent py-3 font-medium text-foreground/75 transition-colors hover:border-foreground hover:text-foreground";
   return (
-    <nav aria-label="Categories" className="border-t border-border/70">
-      <ul className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2 text-sm sm:px-6">
+    <nav aria-label="Categories" className="border-t border-border">
+      <ul className="mx-auto flex max-w-7xl gap-6 overflow-x-auto px-4 text-sm sm:px-6 lg:justify-center lg:gap-8 [scrollbar-width:none]">
         <li>
-          <Link href="/products" className={pill}>All products</Link>
+          <Link href="/products" className={link}>All products</Link>
         </li>
         {categories.map((c) => (
           <li key={c.id}>
-            <Link href={`/category/${c.slug}`} className={pill}>{c.name}</Link>
+            <Link href={`/category/${c.slug}`} className={link}>{c.name}</Link>
           </li>
         ))}
       </ul>
@@ -62,7 +62,7 @@ function SearchBox({ id, className }: { id: string; className?: string }) {
       <label htmlFor={id} className="sr-only">Search products</label>
       <div className="relative">
         <Search aria-hidden className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input id={id} name="q" type="search" placeholder="Search tees, dresses, pajamas…" className="rounded-full border-transparent bg-muted pl-10 focus-visible:bg-card" />
+        <Input id={id} name="q" type="search" placeholder="Search tees, dresses, pajamas…" className="min-h-10 rounded-full border-transparent bg-muted pl-10 text-sm focus-visible:border-input focus-visible:bg-card" />
       </div>
     </Form>
   );
@@ -70,12 +70,12 @@ function SearchBox({ id, className }: { id: string; className?: string }) {
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-30 border-b border-border/70 bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/80">
-      <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
-        <Logo />
-        <SearchBox id="site-search" className="hidden max-w-md flex-1 sm:block" />
-        <div className="ml-auto flex items-center gap-1">
-          <Suspense fallback={<span className="w-24" />}>
+    <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur-md">
+      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4 sm:grid-cols-[1fr_minmax(0,28rem)_1fr] sm:px-6">
+        <Logo className="justify-self-start" />
+        <SearchBox id="site-search" className="hidden w-full sm:block" />
+        <div className="flex items-center justify-self-end gap-0.5">
+          <Suspense fallback={<span className="size-11" />}>
             <AccountLinks />
           </Suspense>
           <Suspense fallback={<span className="inline-flex size-11 items-center justify-center"><ShoppingBag aria-hidden className="size-5" /></span>}>

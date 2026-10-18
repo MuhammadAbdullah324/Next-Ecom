@@ -44,7 +44,7 @@ export function SignInForm({ next }: { next: string }) {
       <Field label="Email" name="email" type="email" autoComplete="email" required defaultValue={state.email} />
       <Field label="Password" name="password" type="password" autoComplete="current-password" required />
       <div className="text-right text-sm">
-        <Link href="/forgot-password" className="text-primary hover:underline">Forgot password?</Link>
+        <Link href="/forgot-password" className="underline underline-offset-4 hover:text-muted-foreground">Forgot password?</Link>
       </div>
       <SubmitButton size="lg" className="w-full" pendingLabel="Signing in…">Sign in</SubmitButton>
     </form>

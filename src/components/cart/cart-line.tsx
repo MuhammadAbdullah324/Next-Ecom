@@ -23,7 +23,7 @@ export function CartLineItem({ line, currency }: { line: CartLine; currency: str
 
   return (
     <li className="flex gap-4 py-6" aria-busy={updating || removing}>
-      <div className="relative size-24 shrink-0 overflow-hidden rounded-2xl border bg-card sm:size-28">
+      <div className="relative aspect-[4/5] w-24 shrink-0 overflow-hidden rounded-md bg-muted sm:w-28">
         {line.imageUrl ? <Image src={line.imageUrl} alt={line.imageAlt} fill sizes="112px" className="object-cover" /> : null}
       </div>
       <div className="flex flex-1 flex-col gap-2">
@@ -48,7 +48,7 @@ export function CartLineItem({ line, currency }: { line: CartLine; currency: str
 
         <div className="mt-auto flex items-center gap-3">
           {line.available && line.stock > 0 ? (
-            <form ref={formRef} action={update} className="inline-flex items-center rounded-full border border-border bg-card">
+            <form ref={formRef} action={update} className="inline-flex items-center rounded-md border border-input bg-card">
               <input type="hidden" name="variantId" value={line.variantId} />
               <input ref={qtyRef} type="hidden" name="quantity" defaultValue={line.quantity} />
               <button type="button" className="inline-flex size-11 items-center justify-center text-lg disabled:text-muted-foreground" onClick={() => setQuantity(line.quantity > max ? max : line.quantity - 1)} disabled={updating || line.quantity <= 1} aria-label={`Decrease quantity of ${line.productName}`}>
@@ -62,7 +62,7 @@ export function CartLineItem({ line, currency }: { line: CartLine; currency: str
           ) : null}
           <form action={remove}>
             <input type="hidden" name="variantId" value={line.variantId} />
-            <button type="submit" disabled={removing} className="min-h-11 rounded-full px-3 text-sm text-muted-foreground hover:bg-muted hover:text-danger">
+            <button type="submit" disabled={removing} className="min-h-11 rounded-md px-3 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
               {removing ? "Removing…" : "Remove"}
             </button>
           </form>

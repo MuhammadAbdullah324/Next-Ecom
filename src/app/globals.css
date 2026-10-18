@@ -3,40 +3,39 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Tiny Threads palette: warm cream, coral, sunshine and mint. Contrast checked for WCAG AA. */
+/* Tiny Threads palette: clean white and ink, with a warm sand surface and a coral sale accent.
+   Contrast checked for WCAG AA. */
 :root {
-  --radius: 1rem;
-  --background: #fffaf2;
-  --foreground: #2a2340;
+  --radius: 0.625rem;
+  --background: #ffffff;
+  --foreground: #18181b;
   --card: #ffffff;
-  --card-foreground: #2a2340;
+  --card-foreground: #18181b;
   --popover: #ffffff;
-  --popover-foreground: #2a2340;
-  --primary: #cc4a33;
+  --popover-foreground: #18181b;
+  --primary: #18181b;
   --primary-foreground: #ffffff;
-  --secondary: #fff1c9;
-  --secondary-foreground: #6b4a00;
-  --muted: #f6efe4;
-  --muted-foreground: #6b6177;
-  --accent: #e3f4ef;
-  --accent-foreground: #1d5c4f;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #63636b;
+  --accent: #f5efe6;
+  --accent-foreground: #3f3427;
   --destructive: #c2362b;
-  --border: #ece2d3;
-  --input: #e4d8c6;
-  --ring: #cc4a33;
+  --border: #e4e4e7;
+  --input: #d4d4d8;
+  --ring: #18181b;
 
   --success: #2f7d4f;
-  --success-soft: #e3f5e8;
+  --success-soft: #e7f5ec;
   --warning: #9a5b00;
-  --warning-soft: #fff1d6;
+  --warning-soft: #fff4dc;
   --danger: #c2362b;
-  --danger-soft: #fde8e6;
+  --danger-soft: #fdecea;
 
-  /* Decorative accents for illustrations and section backgrounds. */
-  --sun: #f6c945;
-  --mint: #bfe6da;
-  --sky: #cfe7f5;
-  --blush: #fbd9e2;
+  /* Brand accent, used for sale prices and small highlights. */
+  --sale: #c2362b;
+  --sand: #f5efe6;
 }
 
 @theme inline {
@@ -64,10 +63,8 @@
   --color-warning-soft: var(--warning-soft);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
-  --color-sun: var(--sun);
-  --color-mint: var(--mint);
-  --color-sky: var(--sky);
-  --color-blush: var(--blush);
+  --color-sale: var(--sale);
+  --color-sand: var(--sand);
 
   --radius-sm: calc(var(--radius) - 6px);
   --radius-md: calc(var(--radius) - 4px);
@@ -75,8 +72,8 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
 
-  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-display), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -87,7 +84,7 @@
     @apply bg-background text-foreground;
   }
   h1, h2, h3 {
-    @apply font-heading;
+    @apply font-heading tracking-tight;
   }
 }
 

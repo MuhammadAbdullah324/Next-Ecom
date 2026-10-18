@@ -21,7 +21,7 @@ async function Content({ searchParams }: { searchParams: PageProps<"/sign-in">["
     <AuthCard
       title="Sign in"
       subtitle="Your cart comes with you when you sign in."
-      footer={<>New here? <Link href={`/sign-up?next=${encodeURIComponent(next)}`} className="font-medium text-primary hover:underline">Create an account</Link></>}
+      footer={<>New here? <Link href={`/sign-up?next=${encodeURIComponent(next)}`} className="font-medium underline underline-offset-4 hover:text-muted-foreground">Create an account</Link></>}
     >
       {error ? <Alert variant="destructive">{error}</Alert> : null}
       <GoogleButton next={next} />
