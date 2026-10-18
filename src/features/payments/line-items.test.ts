@@ -9,14 +9,14 @@ const order = {
   tax_amount: 6,
   total_amount: 85.97,
   items: [
-    { id: "1", product_name: "Charger", variant_name: "White", sku: "C-W", image_url: null, unit_price: 24.99, quantity: 3, line_total: 74.97, product_slug: null },
+    { id: "1", product_name: "Striped Cotton Tee", variant_name: "Navy / 2-3Y", sku: "SD-TEE", image_url: null, unit_price: 24.99, quantity: 3, line_total: 74.97, product_slug: null },
   ],
 } as unknown as Order;
 
 describe("stripeLineItems", () => {
   it("adds delivery and tax lines so Stripe charges exactly the order total", () => {
     const items = stripeLineItems(order);
-    expect(items.map((i) => i.price_data?.product_data?.name)).toEqual(["Charger", "Standard delivery", "Tax"]);
+    expect(items.map((i) => i.price_data?.product_data?.name)).toEqual(["Striped Cotton Tee", "Standard delivery", "Tax"]);
     expect(lineItemsTotal(items)).toBe(8597);
   });
 

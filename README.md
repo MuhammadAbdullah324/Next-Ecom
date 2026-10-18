@@ -1,6 +1,6 @@
-# Next Ecom
+# Tiny Threads
 
-A responsive storefront for phone and laptop accessories built with Next.js (App Router), Supabase Postgres and Stripe Checkout.
+A responsive kids' clothing store built with Next.js (App Router), Supabase Postgres and Stripe Checkout.
 
 - **Shop:** homepage with featured products and categories, product listings with search, filters, sort and pagination, and product pages with a gallery, options, live price and stock, and add to cart.
 - **Cart and checkout:** cart with quantity changes, delivery and tax totals, free delivery over a threshold, then checkout as a guest (email required) or with an account (saved addresses).

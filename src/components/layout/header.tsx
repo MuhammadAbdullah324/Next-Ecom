@@ -89,7 +89,7 @@ export function Header() {
     <header className="sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
         <Link href="/" className="mr-2 text-lg font-bold tracking-tight">
-          Next<span className="text-brand">Ecom</span>
+          Tiny<span className="text-brand">Threads</span>
         </Link>
         <Form action="/products" role="search" className="hidden flex-1 sm:block">
           <label htmlFor="site-search" className="sr-only">
@@ -99,7 +99,7 @@ export function Header() {
             id="site-search"
             name="q"
             type="search"
-            placeholder="Search chargers, earbuds, cases…"
+            placeholder="Search tees, dresses, pajamas…"
             className="min-h-10 w-full max-w-md rounded-full border border-line bg-canvas px-4 text-sm"
           />
         </Form>

@@ -1,4 +1,4 @@
--- Next Ecom: initial schema
+-- Tiny Threads: initial schema
 -- Catalog, profiles, addresses, carts, orders, payments.
 -- Run in the Supabase SQL editor, or keep it in supabase/migrations and run `supabase db push`.
 --
@@ -43,7 +43,7 @@ $$;
 
 create table public.store_settings (
   id boolean primary key default true check (id), -- single row
-  store_name text not null default 'Next Ecom',
+  store_name text not null default 'Tiny Threads',
   currency text not null default 'usd' check (currency ~ '^[a-z]{3}$'),
   tax_rate numeric(5, 4) not null default 0 check (tax_rate >= 0 and tax_rate < 1),
   updated_at timestamptz not null default now()

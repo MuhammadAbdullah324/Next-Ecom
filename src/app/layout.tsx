@@ -7,8 +7,8 @@ import "./globals.css";
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: { default: "NextEcom: mobile accessories", template: "%s | NextEcom" },
-  description: "Fast chargers, cables, power banks, earbuds, cases and smart watches.",
+  title: { default: "Tiny Threads: kids' clothing", template: "%s | Tiny Threads" },
+  description: "Comfy, playground-ready clothes for babies and kids: tees, dresses, pajamas, jackets and more.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

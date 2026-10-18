@@ -36,22 +36,22 @@ test("browse: filter, sort and paginate the catalog @mobile", async ({ page }) =
   await expect(page.getByText("21 products")).toBeVisible();
   await expect(page.getByRole("link", { name: "Page 2" })).toBeVisible();
 
-  await page.goto("/category/earbuds?sort=price-asc");
+  await page.goto("/category/sleepwear?sort=price-asc");
   const names = await page.locator("article h3").allTextContents();
-  expect(names).toEqual(["Wireless Bluetooth Earbuds", "Sport Open-Ear Earbuds", "Noise-Cancelling Earbuds Pro"]);
+  expect(names).toEqual(["Dinosaur Pajama Set", "Starry Night Pajama Set", "Cozy Fleece Sleep Sack"]);
 
-  await page.goto("/products?q=magsafe&inStock=1");
-  await expect(page.getByText(/products? for “magsafe”/)).toBeVisible();
-  await expect(page.locator("article h3")).not.toContainText(["Belkin 15W MagSafe Wireless Pad"]);
+  await page.goto("/products?q=fleece&inStock=1");
+  await expect(page.getByText(/products? for “fleece”/)).toBeVisible();
+  await expect(page.locator("article h3")).not.toContainText(["Fleece-Lined Winter Parka"]);
 
   await page.goto("/products?brand=Nope");
   await expect(page.getByText("No products match")).toBeVisible();
 });
 
 test("product page: options change price and stock", async ({ page }) => {
-  await page.goto("/products/braided-usb-c-to-usb-c-cable");
+  await page.goto("/products/striped-cotton-tee");
   await expect(page.getByText("$12.99").first()).toBeVisible();
-  await page.getByRole("button", { name: optionName("2 m") }).click();
+  await page.getByRole("button", { name: optionName("4-5Y") }).click();
   await expect(page.getByText("$14.99").first()).toBeVisible();
   await page.getByRole("button", { name: optionName("Red") }).click();
   await expect(page.getByText("Out of stock").first()).toBeVisible();
@@ -59,9 +59,9 @@ test("product page: options change price and stock", async ({ page }) => {
 });
 
 test("guest checkout: successful payment shows confirmation and empties the cart", async ({ page }) => {
-  await addToCart(page, "braided-usb-c-to-usb-c-cable", ["Red", "1 m"], 2);
+  await addToCart(page, "striped-cotton-tee", ["Red", "2-3Y"], 2);
   await page.goto("/cart");
-  await expect(page.getByText("Red / 1 m")).toBeVisible();
+  await expect(page.getByText("Red / 2-3Y")).toBeVisible();
   await page.getByRole("link", { name: "Go to checkout" }).click();
 
   await page.getByLabel("Email").fill("guest@example.com");
@@ -80,7 +80,7 @@ test("guest checkout: successful payment shows confirmation and empties the cart
 });
 
 test("guest checkout: canceling on the payment page keeps the cart", async ({ page }) => {
-  await addToCart(page, "3-in-1-multi-charging-cable");
+  await addToCart(page, "cotton-sun-hat");
   await page.goto("/checkout");
   await page.getByLabel("Email").fill("guest@example.com");
   await fillNewAddress(page);
@@ -89,11 +89,11 @@ test("guest checkout: canceling on the payment page keeps the cart", async ({ pa
 
   await expect(page.getByText("Payment canceled")).toBeVisible();
   await expect(page.getByText("You have not been charged.")).toBeVisible();
-  await expect(page.getByRole("link", { name: "3-in-1 Multi Charging Cable" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Cotton Sun Hat" })).toBeVisible();
 });
 
 test("guest checkout: failed payment explains what happened", async ({ page }) => {
-  await addToCart(page, "3-in-1-multi-charging-cable");
+  await addToCart(page, "cotton-sun-hat");
   await page.goto("/checkout");
   await page.getByLabel("Email").fill("guest@example.com");
   await fillNewAddress(page);
@@ -102,11 +102,11 @@ test("guest checkout: failed payment explains what happened", async ({ page }) =
 
   await expect(page.getByRole("heading", { name: "Your payment didn't go through" })).toBeVisible();
   await page.getByRole("link", { name: "Return to cart" }).click();
-  await expect(page.getByRole("link", { name: "3-in-1 Multi Charging Cable" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Cotton Sun Hat" })).toBeVisible();
 });
 
 test("checkout validation shows field errors", async ({ page }) => {
-  await addToCart(page, "3-in-1-multi-charging-cable");
+  await addToCart(page, "cotton-sun-hat");
   await page.goto("/checkout");
   await page.getByRole("button", { name: "Continue to payment" }).click();
   await expect(page.getByText("Enter the recipient's name.")).toBeVisible();
@@ -115,7 +115,7 @@ test("checkout validation shows field errors", async ({ page }) => {
 
 test("account: sign up, keep guest cart, save address, see order history", async ({ page }) => {
   const email = `shopper+${Date.now()}@example.com`;
-  await addToCart(page, "anker-20w-usb-c-fast-charger");
+  await addToCart(page, "organic-cotton-bodysuit-3-pack");
 
   await page.goto("/sign-up?next=/cart");
   await page.getByLabel("Full name").fill("Test Shopper");
@@ -123,7 +123,7 @@ test("account: sign up, keep guest cart, save address, see order history", async
   await page.getByLabel("Password").fill("correct-horse-42");
   await page.getByRole("button", { name: "Create account" }).click();
   await expect(page).toHaveURL(/\/cart$/);
-  await expect(page.getByRole("link", { name: "Anker 20W USB-C Fast Charger" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Organic Cotton Bodysuit 3-Pack" })).toBeVisible();
 
   await page.getByRole("link", { name: "Go to checkout" }).click();
   await expect(page.getByText(`Confirmation goes to ${email}`)).toBeVisible();
@@ -135,7 +135,7 @@ test("account: sign up, keep guest cart, save address, see order history", async
   await page.goto("/orders");
   await expect(page.getByText("Confirmed")).toBeVisible();
 
-  await addToCart(page, "anker-20w-usb-c-fast-charger");
+  await addToCart(page, "organic-cotton-bodysuit-3-pack");
   await page.goto("/checkout");
   await expect(page.getByText("Test Shopper").first()).toBeVisible(); // saved address offered
   await expect(page.locator('input[name="savedAddressId"]')).toBeChecked();
@@ -144,14 +144,14 @@ test("account: sign up, keep guest cart, save address, see order history", async
   await page.goto("/");
   await page.getByText("Account", { exact: true }).click();
   await page.getByRole("button", { name: "Sign out" }).click();
-  await addToCart(page, "usb-c-to-lightning-cable");
+  await addToCart(page, "rainbow-socks-5-pack");
   await page.goto("/sign-in?next=/cart");
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password").fill("correct-horse-42");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/cart$/);
-  await expect(page.getByRole("link", { name: "USB-C to Lightning Cable" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Anker 20W USB-C Fast Charger" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Rainbow Socks 5-Pack" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Organic Cotton Bodysuit 3-Pack" })).toBeVisible();
 });
 
 test("protected pages send guests to sign in", async ({ page }) => {

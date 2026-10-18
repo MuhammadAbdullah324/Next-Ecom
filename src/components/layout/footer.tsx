@@ -5,8 +5,8 @@ export function Footer() {
     <footer className="mt-16 border-t border-line bg-surface">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 text-sm text-ink-soft sm:grid-cols-3 sm:px-6">
         <div>
-          <p className="font-semibold text-ink">NextEcom</p>
-          <p className="mt-2">Chargers, cables, earbuds and cases that keep your phone going.</p>
+          <p className="font-semibold text-ink">Tiny Threads</p>
+          <p className="mt-2">Soft, durable clothes for babies and kids, from newborn to 8 years.</p>
         </div>
         <div>
           <p className="font-semibold text-ink">Shop</p>
