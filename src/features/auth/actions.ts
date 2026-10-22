@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { publicEnv } from "@/lib/env";
+import { requestSiteUrl } from "@/lib/site-url";
 import { createClient } from "@/lib/supabase/server";
 import { mergeGuestInto, mergeRememberedGuest, rememberGuestForMerge } from "./guest";
 import { safeNext } from "./redirects";
@@ -16,8 +16,8 @@ function firstIssue(error: z.ZodError) {
   return error.issues[0]?.message ?? "Check the form and try again.";
 }
 
-function callbackUrl(next: string) {
-  return `${publicEnv.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${encodeURIComponent(next)}`;
+async function callbackUrl(next: string) {
+  return `${await requestSiteUrl()}/auth/callback?next=${encodeURIComponent(next)}`;
 }
 
 async function currentGuestId(supabase: Awaited<ReturnType<typeof createClient>>) {
@@ -65,7 +65,7 @@ export async function signUp(_: AuthFormState, formData: FormData): Promise<Auth
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
-    options: { data: { full_name: parsed.data.fullName }, emailRedirectTo: callbackUrl(next) },
+    options: { data: { full_name: parsed.data.fullName }, emailRedirectTo: await callbackUrl(next) },
   });
   if (error) {
     const taken = error.code === "user_already_exists" || error.code === "email_exists";
@@ -88,7 +88,7 @@ export async function signInWithGoogle(formData: FormData) {
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
-    options: { redirectTo: callbackUrl(next) },
+    options: { redirectTo: await callbackUrl(next) },
   });
   if (error || !data.url) redirect(`/sign-in?error=google&next=${encodeURIComponent(next)}`);
   redirect(data.url);
@@ -105,7 +105,7 @@ export async function requestPasswordReset(_: AuthFormState, formData: FormData)
   if (!parsed.success) return { error: firstIssue(parsed.error) };
 
   const supabase = await createClient();
-  await supabase.auth.resetPasswordForEmail(parsed.data, { redirectTo: callbackUrl("/reset-password") });
+  await supabase.auth.resetPasswordForEmail(parsed.data, { redirectTo: await callbackUrl("/reset-password") });
   // Same answer whether or not the account exists, so emails can't be probed.
   return { message: `If an account exists for ${parsed.data}, we sent a link to reset the password.` };
 }
