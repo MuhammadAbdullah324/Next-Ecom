@@ -2,7 +2,7 @@ import "server-only";
 import type Stripe from "stripe";
 import { revalidateTag } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { publicEnv } from "@/lib/env";
+import { configuredSiteUrl } from "@/lib/site-url";
 import { CATALOG_TAG } from "@/features/catalog/queries";
 import { orderConfirmationEmail } from "@/features/email/order-confirmation";
 import { sendEmail } from "@/features/email/send";
@@ -82,7 +82,7 @@ export async function recordCheckoutSession(session: Stripe.Checkout.Session): P
     refreshCatalog();
     const order = await loadOrderForEmail(orderId);
     if (order) {
-      const url = `${publicEnv.NEXT_PUBLIC_SITE_URL}/orders/${order.order_number}`;
+      const url = `${configuredSiteUrl()}/orders/${order.order_number}`;
       await sendEmail(order.email, orderConfirmationEmail(order, url));
     }
   }

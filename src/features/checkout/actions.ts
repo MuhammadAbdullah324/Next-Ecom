@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { publicEnv } from "@/lib/env";
+import { requestSiteUrl } from "@/lib/site-url";
 import { userMessage } from "@/lib/db-errors";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -77,7 +77,7 @@ export async function startCheckout(_: CheckoutState, formData: FormData): Promi
     }
 
     try {
-      const site = publicEnv.NEXT_PUBLIC_SITE_URL;
+      const site = await requestSiteUrl();
       const session = await getStripe().checkout.sessions.create(
         {
           mode: "payment",
