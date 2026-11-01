@@ -1,4 +1,4 @@
-// A small three.js scene: a dark thermal printer feeding out a paper receipt.
+// A small three.js scene: a thermal printer feeding out a paper receipt.
 // Loaded with a dynamic import from ReceiptPrinter, so three.js only ships to the confirmation page.
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
