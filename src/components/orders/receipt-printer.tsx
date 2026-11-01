@@ -24,17 +24,28 @@ export function ReceiptPrinter({ order }: { order: ReceiptOrder }) {
     if (!el) return;
     let canceled = false;
     const animate = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    import("./receipt-scene")
-      .then(({ mountReceiptScene }) => {
-        if (canceled) return;
-        const scene = mountReceiptScene(el, buildReceipt(order), { animate });
-        sceneRef.current = scene;
-        setAnimated(animate);
-        setState(scene ? "ready" : "unsupported");
-      })
-      .catch(() => !canceled && setState("unsupported"));
+    const loaded = import("./receipt-scene");
+    // Start printing only once the printer is on screen, so the shopper sees it happen.
+    const seen = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        seen.disconnect();
+        loaded
+          .then(({ mountReceiptScene }) => {
+            if (canceled) return;
+            const scene = mountReceiptScene(el, buildReceipt(order), { animate });
+            sceneRef.current = scene;
+            setAnimated(animate);
+            setState(scene ? "ready" : "unsupported");
+          })
+          .catch(() => !canceled && setState("unsupported"));
+      },
+      { threshold: 0.4 },
+    );
+    seen.observe(el);
     return () => {
       canceled = true;
+      seen.disconnect();
       sceneRef.current?.dispose();
       sceneRef.current = null;
     };
@@ -45,7 +56,7 @@ export function ReceiptPrinter({ order }: { order: ReceiptOrder }) {
   return (
     <section
       aria-label="Your receipt"
-      className="relative overflow-hidden rounded-xl bg-[radial-gradient(120%_90%_at_50%_15%,#2b3448_0%,#141a26_55%,#0b0f17_100%)]"
+      className="relative overflow-hidden rounded-xl border bg-[radial-gradient(110%_85%_at_50%_10%,#ffffff_0%,var(--sand)_70%)]"
     >
       <div
         ref={stage}
@@ -55,14 +66,14 @@ export function ReceiptPrinter({ order }: { order: ReceiptOrder }) {
       />
       {state === "loading" ? (
         <div aria-hidden className="absolute inset-0 grid place-items-center">
-          <div className="h-24 w-40 animate-pulse rounded-2xl bg-white/5" />
+          <div className="h-24 w-40 animate-pulse rounded-2xl bg-foreground/5" />
         </div>
       ) : null}
       {state === "ready" && animated ? (
         <button
           type="button"
           onClick={() => sceneRef.current?.replay()}
-          className="absolute top-3 right-3 inline-flex min-h-9 items-center gap-1.5 rounded-full bg-white/10 px-3.5 text-sm font-medium text-white backdrop-blur transition-colors outline-none hover:bg-white/20 focus-visible:ring-[3px] focus-visible:ring-white/50"
+          className="absolute top-3 right-3 inline-flex min-h-9 items-center gap-1.5 rounded-full border bg-card/80 px-3.5 text-sm font-medium text-foreground backdrop-blur transition-colors outline-none hover:border-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
         >
           <RotateCcw className="size-4" aria-hidden />
           Print again

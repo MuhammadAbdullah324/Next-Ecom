@@ -139,8 +139,8 @@ function shadowTexture() {
   c.width = c.height = 256;
   const ctx = c.getContext("2d")!;
   const g = ctx.createRadialGradient(128, 128, 10, 128, 128, 128);
-  g.addColorStop(0, "rgba(0,0,0,0.65)");
-  g.addColorStop(0.55, "rgba(0,0,0,0.25)");
+  g.addColorStop(0, "rgba(63,52,39,0.38)");
+  g.addColorStop(0.55, "rgba(63,52,39,0.14)");
   g.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 256, 256);
@@ -159,7 +159,7 @@ export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { an
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 0.95;
   renderer.localClippingEnabled = true;
   renderer.domElement.style.display = "block";
   renderer.domElement.style.width = "100%";
@@ -170,21 +170,22 @@ export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { an
   const pmrem = new THREE.PMREMGenerator(renderer);
   const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04);
   scene.environment = envRT.texture;
-  scene.environmentIntensity = 0.45;
+  scene.environmentIntensity = 0.6;
 
-  scene.add(new THREE.HemisphereLight(0xd6defc, 0x0a0c12, 0.7));
-  const key = new THREE.DirectionalLight(0xffffff, 1.7);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xd9d2c5, 1.1));
+  const key = new THREE.DirectionalLight(0xfffaf2, 1.6);
   key.position.set(2.5, 4.5, 3.5);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0x7f9cff, 1.4);
+  const rim = new THREE.DirectionalLight(0xf3ece0, 0.8);
   rim.position.set(-3.5, 2.5, -3);
   scene.add(rim);
 
   // The printer
   const model = new THREE.Group();
   scene.add(model);
-  const body = new THREE.MeshStandardMaterial({ color: 0x2a2e35, roughness: 0.5, metalness: 0.15 });
-  const dark = new THREE.MeshStandardMaterial({ color: 0x0d0f13, roughness: 0.35, metalness: 0.3 });
+  // Matches the store: a warm off-white body with ink-coloured details.
+  const body = new THREE.MeshStandardMaterial({ color: 0xe2ddd4, roughness: 0.55, metalness: 0.05 });
+  const dark = new THREE.MeshStandardMaterial({ color: 0x27272a, roughness: 0.4, metalness: 0.2 });
 
   const base = new THREE.Mesh(new RoundedBoxGeometry(2.7, 0.62, 2.0, 6, 0.2), body);
   base.position.y = 0.31;
@@ -192,7 +193,7 @@ export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { an
   seam.position.y = 0.625;
   const lid = new THREE.Mesh(new RoundedBoxGeometry(2.66, 0.34, 1.96, 6, 0.16), body);
   lid.position.y = 0.802;
-  const slot = new THREE.Mesh(new THREE.BoxGeometry(1.95, 0.02, 0.11), new THREE.MeshBasicMaterial({ color: 0x030405 }));
+  const slot = new THREE.Mesh(new THREE.BoxGeometry(1.95, 0.02, 0.11), new THREE.MeshBasicMaterial({ color: 0x18181b }));
   slot.position.set(0, LID_TOP - 0.006, SLOT_Z);
   const lip = new THREE.Mesh(new RoundedBoxGeometry(2.05, 0.04, 0.06, 2, 0.015), dark);
   lip.position.set(0, LID_TOP + 0.012, SLOT_Z + 0.1);
@@ -263,8 +264,8 @@ export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { an
   };
 
   // ------------------------------------------------------------ animation
-  const startDelay = 0.6;
-  const feedTime = 1.6 + paperHeight * 0.9;
+  const startDelay = 0.9;
+  const feedTime = 2.4 + paperHeight * 1.1;
   let start = performance.now();
   let frame = 0;
   let tilt = 0;
