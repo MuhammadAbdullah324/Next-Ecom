@@ -8,6 +8,8 @@ import { recordCheckoutSession } from "@/features/payments/fulfillment";
 import { getStripe } from "@/features/payments/stripe";
 import { OrderDetails } from "@/components/orders/order-details";
 import { OutcomeBanner } from "@/components/orders/outcome-banner";
+import { ReceiptPrinter } from "@/components/orders/receipt-printer";
+import { describeOrder } from "@/features/orders/status";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = { title: "Order confirmation", robots: { index: false } };
@@ -33,6 +35,7 @@ async function Confirmation({ searchParams }: { searchParams: PageProps<"/checko
   return (
     <div className="space-y-8">
       <OutcomeBanner order={order} isGuest={user?.isGuest ?? true} />
+      {describeOrder(order).key === "paid" ? <ReceiptPrinter order={order} /> : null}
       <OrderDetails order={order} />
     </div>
   );
