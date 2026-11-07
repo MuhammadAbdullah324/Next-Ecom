@@ -107,17 +107,21 @@ function drawReceipt(receipt: Receipt) {
   canvas.height = height;
   const ctx = canvas.getContext("2d")!;
 
-  // Paper with a torn zig-zag top edge.
+  // Paper with torn zig-zag edges. The bottom one stays inside the printer until the sheet is torn off.
   ctx.save();
   ctx.beginPath();
   const tooth = 24;
-  ctx.moveTo(0, height);
+  ctx.moveTo(0, height - 22);
   ctx.lineTo(0, 22);
-  for (let x = 0; x <= W; x += tooth) {
+  for (let x = 0; x < W; x += tooth) {
     ctx.lineTo(x + tooth / 2, 6);
     ctx.lineTo(x + tooth, 22);
   }
-  ctx.lineTo(W, height);
+  ctx.lineTo(W, height - 22);
+  for (let x = W; x > 0; x -= tooth) {
+    ctx.lineTo(x - tooth / 2, height - 6);
+    ctx.lineTo(x - tooth, height - 22);
+  }
   ctx.closePath();
   ctx.clip();
   const paper = ctx.createLinearGradient(0, 0, 0, height);
@@ -149,7 +153,11 @@ function shadowTexture() {
 
 // ---------------------------------------------------------------- scene
 
-export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { animate }: { animate: boolean }): ReceiptScene | null {
+export function mountReceiptScene(
+  container: HTMLElement,
+  receipt: Receipt,
+  { animate, onTorn }: { animate: boolean; onTorn?: () => void },
+): ReceiptScene | null {
   let renderer: THREE.WebGLRenderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power" });
@@ -232,7 +240,8 @@ export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { an
     roughness: 0.85,
     metalness: 0,
     side: THREE.DoubleSide,
-    alphaTest: 0.5,
+    transparent: true,
+    alphaTest: 0.02,
     clippingPlanes: [new THREE.Plane(new THREE.Vector3(0, 1, 0), -LID_TOP)],
   });
   const paper = new THREE.Mesh(paperGeo, paperMat);
@@ -264,26 +273,55 @@ export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { an
   };
 
   // ------------------------------------------------------------ animation
+  // Timeline (seconds): wait, feed the paper out, hold a beat, then tear it off and lift it away.
   const startDelay = 0.9;
   const feedTime = 2.4 + paperHeight * 1.1;
+  const hold = 0.7;
+  const tearTime = 1.0;
+  const easeIn = (x: number) => x * x * x;
   let start = performance.now();
   let frame = 0;
   let tilt = 0;
   let tiltTarget = 0;
-  let printed = !animate;
+  let playing = animate;
+  let torn = false;
+  let announced = false;
 
   const pose = (now: number) => {
-    const t = (now - start) / 1000 - startDelay;
-    const p = printed ? 1 : THREE.MathUtils.clamp(t / feedTime, 0, 1);
+    // Without motion the receipt simply sits printed in the slot.
+    const t = playing ? (now - start) / 1000 - startDelay : torn ? feedTime + hold + tearTime : feedTime;
+    const p = THREE.MathUtils.clamp(t / feedTime, 0, 1);
     // Thermal printers feed in short bursts: an eased ramp with a small stutter on top.
     const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-    const stutter = p > 0 && p < 1 ? Math.sin(t * 38) * 0.006 : 0;
-    paper.position.y = hiddenY + (shownY - hiddenY) * eased + stutter;
     const feeding = p > 0 && p < 1;
+    const stutter = feeding ? Math.sin(t * 38) * 0.006 : 0;
+    paper.position.set(0, hiddenY + (shownY - hiddenY) * eased + stutter, 0);
+    paper.rotation.set(0, 0, 0);
+
+    // Tear: a quick tug against the cutter, then the sheet lifts up and toward the viewer.
+    const k = THREE.MathUtils.clamp((t - feedTime - hold) / tearTime, 0, 1);
+    const tug = Math.sin(Math.min(k / 0.18, 1) * Math.PI) * 0.06;
+    const fly = easeIn(THREE.MathUtils.clamp((k - 0.15) / 0.85, 0, 1));
+    paper.position.y += tug + fly * 1.4;
+    paper.position.z = fly * 2.4;
+    paper.rotation.x = -fly * 0.3;
+    paper.rotation.z = Math.sin(k * Math.PI) * 0.08;
+    paperMat.opacity = 1 - fly;
+    paper.visible = k < 1;
+
     model.position.y = feeding ? Math.sin(t * 95) * 0.0025 : 0;
     ledMat.emissive.set(feeding ? 0x60a5fa : 0x34d399);
     ledMat.emissiveIntensity = feeding ? 1.4 + Math.sin(t * 18) : p >= 1 ? 1.6 : 0.4;
-    if (p >= 1) printed = true;
+
+    // Hand over to the full-screen receipt while the sheet is still in the air.
+    if (playing && k >= 0.5 && !announced) {
+      announced = true;
+      onTorn?.();
+    }
+    if (playing && k >= 1) {
+      playing = false;
+      torn = true;
+    }
     tilt += (tiltTarget - tilt) * 0.08;
     model.rotation.y = tilt;
   };
@@ -292,7 +330,7 @@ export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { an
     pose(now);
     renderer.render(scene, camera);
     const settling = Math.abs(tiltTarget - tilt) > 0.0005;
-    frame = !printed || settling ? requestAnimationFrame(loop) : 0;
+    frame = playing || settling ? requestAnimationFrame(loop) : 0;
   };
   const wake = () => {
     if (!frame) frame = requestAnimationFrame(loop);
@@ -321,7 +359,10 @@ export function mountReceiptScene(container: HTMLElement, receipt: Receipt, { an
 
   return {
     replay() {
-      printed = false;
+      if (!animate) return;
+      playing = true;
+      torn = false;
+      announced = false;
       start = performance.now() - startDelay * 500;
       wake();
     },

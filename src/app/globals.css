@@ -102,3 +102,22 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Receipt paper with torn zig-zag edges at the top and bottom. */
+.receipt-zigzag {
+  --tooth: 14px;
+  mask:
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--tooth) 51% repeat-x,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--tooth) 51% repeat-x;
+}
+
+/* The torn-off receipt flies in from where the printer sits and settles. */
+@keyframes receipt-arrive {
+  from { opacity: 0; transform: translateY(18vh) rotate(-5deg) scale(0.72); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+.receipt-arrive { animation: receipt-arrive 0.65s cubic-bezier(0.2, 0.9, 0.25, 1.05) both; }
+@media (prefers-reduced-motion: reduce) {
+  .receipt-arrive { animation: none; }
+}
