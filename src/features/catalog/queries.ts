@@ -3,7 +3,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { createPublicClient } from "@/lib/supabase/public";
 import { toAmount } from "@/lib/money";
 import { PAGE_SIZE, type ListingFilters } from "./search-params";
-import type { Category, ListingPage, ProductDetail, ProductListing, Promotion } from "./types";
+import type { Category, ListingPage, ProductDetail, ProductListing, Promotion, PromotionPage } from "./types";
 
 // Catalog data is public and shared, so it is cached and tagged. Stock is re-checked
 // by the database whenever someone adds to cart or checks out.
@@ -47,10 +47,21 @@ export async function getPromotions(): Promise<Promotion[]> {
 
   const { data, error } = await createPublicClient()
     .from("promotions")
-    .select("id, placement, title, subtitle, cta_label, cta_href, image_url")
+    .select("id, placement, page, category_id, eyebrow, title, subtitle, cta_label, cta_href, cta2_label, cta2_href, image_url")
     .order("sort_order");
   if (error) throw new Error(`Could not load promotions: ${error.message}`);
   return data as Promotion[];
+}
+
+// Live content for one storefront page (active, inside its schedule: RLS filters the rest). Category pages also get content placed on every category page.
+export async function getPagePromotions(page: PromotionPage, categoryId?: string | null) {
+  const all = await getPromotions();
+  const here = all.filter((p) => p.page === page && (page !== "category" || p.category_id == null || p.category_id === categoryId));
+  return {
+    banners: here.filter((p) => p.placement === "banner"), // "all" banners are drawn by the root layout
+    heroes: here.filter((p) => p.placement === "hero"),
+    features: here.filter((p) => p.placement === "feature"),
+  };
 }
 
 export async function getFeaturedProducts(limit = 8): Promise<ProductListing[]> {

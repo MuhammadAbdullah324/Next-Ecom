@@ -5,6 +5,7 @@ import { Search, ShoppingBag, UserRound } from "lucide-react";
 import { getCategories } from "@/features/catalog/queries";
 import { getCartCount } from "@/features/cart/queries";
 import { getCurrentUser } from "@/features/auth/session";
+import { getIsAdmin } from "@/features/admin/guard";
 import { ButtonLink } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AccountMenu } from "./account-menu";
@@ -34,7 +35,7 @@ async function AccountLinks() {
       </ButtonLink>
     );
   }
-  return <AccountMenu email={user.email ?? null} />;
+  return <AccountMenu email={user.email ?? null} isAdmin={await getIsAdmin()} />;
 }
 
 async function CategoryNav() {

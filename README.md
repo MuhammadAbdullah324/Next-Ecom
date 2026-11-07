@@ -5,6 +5,7 @@ A responsive kids' clothing store built with Next.js (App Router), Supabase Post
 - **Shop:** homepage with featured products and categories, product listings with search, filters, sort and pagination, and product pages with a gallery, options, live price and stock, and add to cart.
 - **Cart and checkout:** cart with quantity changes, delivery and tax totals, free delivery over a threshold, then checkout as a guest (email required) or with an account (saved addresses).
 - **Payments:** the database prices and reserves the order, Stripe hosted Checkout takes the payment, and a signed webhook marks it paid. Orders always end up in one clear state: paid, payment failed, or canceled, with stock released when payment doesn't happen.
+- **Admin dashboard (`/admin`):** products with sizes, stock and photo uploads, categories, orders (fulfillment steps, Stripe refunds), hero banners and carousels for any page, customers and roles, store and delivery settings. See [docs/admin-guide.md](docs/admin-guide.md).
 - **Accounts:** sign up, sign in (email or Google), sign out, password reset, order history and saved addresses. A guest cart carries over when the shopper signs in.
 
 ## Getting started
@@ -30,8 +31,10 @@ npm run dev
 
 ```
 supabase/            schema migration, seed data, SQL tests
-src/app/             routes (pages, Stripe webhook, auth callback)
-src/features/        domain logic: catalog, cart, checkout, payments, orders, auth, account, email
+src/app/(store)/     storefront routes (own header and footer)
+src/app/admin/       admin dashboard routes (own sidebar layout)
+src/app/api, auth/   Stripe webhook, auth callback
+src/features/        domain logic: catalog, cart, checkout, payments, orders, auth, account, email, admin
 src/components/      UI building blocks and feature components
 src/lib/             env parsing, Supabase clients, money helpers
 e2e/                 Playwright tests and the fake Stripe server they use

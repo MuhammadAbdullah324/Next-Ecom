@@ -52,13 +52,22 @@ export type ProductDetail = {
   variants: ProductVariant[];
 };
 
+export type PromotionPage = "all" | "home" | "products" | "category" | "cart";
+
 export type Promotion = {
   id: string;
-  placement: "hero" | "banner";
+  // banner: thin announcement bar. hero: big banner (several on one page play as a carousel).
+  // feature: image-and-text card further down the page.
+  placement: "banner" | "hero" | "feature";
+  page: PromotionPage;
+  category_id: string | null; // page "category" only; null = every category page
+  eyebrow: string | null;
   title: string;
   subtitle: string | null;
   cta_label: string | null;
   cta_href: string | null;
+  cta2_label: string | null;
+  cta2_href: string | null;
   image_url: string | null;
 };
 

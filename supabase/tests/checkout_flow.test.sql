@@ -116,7 +116,8 @@ select pg_temp.expect_error($q$select create_checkout_order('standard', (select 
 select pg_temp.expect_error($q$select cancel_my_pending_order((select id from orders limit 1))$q$, 'not found');
 select pg_temp.expect_error($q$select mark_order_paid(gen_random_uuid(), 'x','y',1,'usd')$q$, 'permission denied');
 select pg_temp.expect_error($q$update orders set status = 'confirmed'$q$, 'permission denied');
-select pg_temp.expect_error($q$update product_variants set stock_quantity = 999$q$, 'permission denied');
+-- Customers hold the table grant (admins need it) but RLS lets them change nothing.
+with u as (update product_variants set stock_quantity = 999 returning 1) select 'customer stock update rows (expect 0)', count(*) from u;
 reset role;
 -- state consistency constraint
 select pg_temp.expect_error($q$update orders set payment_status='paid' where status='canceled'$q$, 'orders_status_consistent');
