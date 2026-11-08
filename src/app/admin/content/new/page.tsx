@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { requireAdmin } from "@/features/admin/guard";
 import { listAdminCategories, textParam } from "@/features/admin/queries";
-import { AdminPageHeader, Panel } from "@/components/admin/page-header";
+import { AdminPageHeader, Panel, AdminSkeleton } from "@/components/admin/page-header";
 import { PromotionForm } from "@/components/admin/promotion-form";
 
 export const metadata: Metadata = { title: "New banner" };
 
-export default async function NewPromotionPage({ searchParams }: PageProps<"/admin/content/new">) {
+async function NewPromotionPageContent({ searchParams }: PageProps<"/admin/content/new">) {
   await requireAdmin("/admin/content/new");
   const [categories, sp] = await Promise.all([listAdminCategories(), searchParams]);
   const page = textParam(sp.page);
@@ -17,5 +18,15 @@ export default async function NewPromotionPage({ searchParams }: PageProps<"/adm
         <PromotionForm categories={categories} defaults={{ page, placement: page === "all" ? "banner" : undefined }} />
       </Panel>
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function NewPromotionPage(props: PageProps<"/admin/content/new">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <NewPromotionPageContent {...props} />
+    </Suspense>
   );
 }

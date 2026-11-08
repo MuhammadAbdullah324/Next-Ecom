@@ -13,6 +13,6 @@ function apiOverride(): Stripe.StripeConfig {
 }
 
 export function getStripe() {
-  client ??= new Stripe(serverEnv().STRIPE_SECRET_KEY, { appInfo: { name: "next-ecom" }, ...apiOverride() });
+  client ??= new Stripe(serverEnv().STRIPE_SECRET_KEY, { appInfo: { name: "tiny-threads" }, ...apiOverride() });
   return client;
 }

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { AlertTriangle, ArrowRight } from "lucide-react";
 import { requireAdmin } from "@/features/admin/guard";
 import { getDashboardStats, listAdminOrders, listLowStock, textParam } from "@/features/admin/queries";
 import { getStoreSettings } from "@/features/checkout/queries";
 import { formatMoney } from "@/lib/money";
-import { AdminPageHeader, Panel } from "@/components/admin/page-header";
+import { AdminPageHeader, Panel, AdminSkeleton } from "@/components/admin/page-header";
 import { OrderBadge } from "@/components/admin/order-badge";
 import { RevenueChart } from "@/components/admin/revenue-chart";
 import { cn } from "@/lib/utils";
@@ -29,7 +30,7 @@ function Stat({ label, value, sub, href }: { label: string; value: string; sub?:
   );
 }
 
-export default async function AdminOverviewPage({ searchParams }: PageProps<"/admin">) {
+async function AdminOverviewPageContent({ searchParams }: PageProps<"/admin">) {
   const user = await requireAdmin("/admin");
   const sp = await searchParams;
   const days = RANGES.find((r) => String(r) === textParam(sp.days)) ?? 30;
@@ -119,5 +120,15 @@ export default async function AdminOverviewPage({ searchParams }: PageProps<"/ad
         )}
       </Panel>
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function AdminOverviewPage(props: PageProps<"/admin">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <AdminOverviewPageContent {...props} />
+    </Suspense>
   );
 }

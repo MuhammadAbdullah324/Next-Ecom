@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { requireAdmin } from "@/features/admin/guard";
 import { listAdminCategories, listAdminPromotions, type AdminPromotion } from "@/features/admin/queries";
 import { setPromotionActive } from "@/features/admin/store-actions";
-import { AdminPageHeader, EmptyState } from "@/components/admin/page-header";
+import { AdminPageHeader, EmptyState, AdminSkeleton } from "@/components/admin/page-header";
 import { PAGE_LABELS, PLACEMENT_LABELS } from "@/features/admin/content-labels";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +24,7 @@ function scheduleState(p: AdminPromotion, now = Date.now()) {
   return { label: "Live", variant: "success" as const };
 }
 
-export default async function AdminContentPage({ searchParams }: PageProps<"/admin/content">) {
+async function AdminContentPageContent({ searchParams }: PageProps<"/admin/content">) {
   await requireAdmin("/admin/content");
   const [promotions, categories, sp] = await Promise.all([listAdminPromotions(), listAdminCategories(), searchParams]);
   const categoryName = new Map(categories.map((c) => [c.id, c.name]));
@@ -95,5 +96,15 @@ export default async function AdminContentPage({ searchParams }: PageProps<"/adm
         </div>
       )}
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function AdminContentPage(props: PageProps<"/admin/content">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <AdminContentPageContent {...props} />
+    </Suspense>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ExternalLink, Trash2 } from "lucide-react";
 import { z } from "zod";
@@ -6,7 +7,7 @@ import { requireAdmin } from "@/features/admin/guard";
 import { getAdminProduct, listAdminCategories } from "@/features/admin/queries";
 import { deleteProduct, setProductActive } from "@/features/admin/catalog-actions";
 import { getStoreSettings } from "@/features/checkout/queries";
-import { AdminPageHeader, Panel } from "@/components/admin/page-header";
+import { AdminPageHeader, Panel, AdminSkeleton } from "@/components/admin/page-header";
 import { ProductForm } from "@/components/admin/product-form";
 import { VariantEditor } from "@/components/admin/variant-editor";
 import { ImageManager } from "@/components/admin/image-manager";
@@ -18,7 +19,7 @@ import { SubmitButton } from "@/components/ui/submit-button";
 
 export const metadata: Metadata = { title: "Edit product" };
 
-export default async function EditProductPage({ params, searchParams }: PageProps<"/admin/products/[id]">) {
+async function EditProductPageContent({ params, searchParams }: PageProps<"/admin/products/[id]">) {
   const { id } = await params;
   await requireAdmin(`/admin/products/${id}`);
   if (!z.uuid().safeParse(id).success) notFound();
@@ -79,5 +80,15 @@ export default async function EditProductPage({ params, searchParams }: PageProp
         </Panel>
       </div>
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function EditProductPage(props: PageProps<"/admin/products/[id]">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <EditProductPageContent {...props} />
+    </Suspense>
   );
 }
