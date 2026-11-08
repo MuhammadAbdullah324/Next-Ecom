@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/alert";
 import { ButtonLink } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatMoney } from "@/lib/money";
+import { PageAnnouncement, PageFeatures, PageHero } from "@/components/content/page-promotions";
 
 export const metadata: Metadata = { title: "Cart" };
 
@@ -85,7 +86,10 @@ async function CartContents() {
 
 export default function CartPage({ searchParams }: PageProps<"/cart">) {
   return (
+    <>
+    <PageAnnouncement page="cart" />
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+      <PageHero page="cart" className="mb-8" />
       <h1 className="mb-8 text-3xl font-semibold sm:text-4xl">Your cart</h1>
       <Suspense fallback={null}>
         <CanceledNotice searchParams={searchParams} />
@@ -93,6 +97,8 @@ export default function CartPage({ searchParams }: PageProps<"/cart">) {
       <Suspense fallback={<div className="space-y-4"><Skeleton className="h-28" /><Skeleton className="h-28" /></div>}>
         <CartContents />
       </Suspense>
+      <PageFeatures page="cart" className="mt-16" />
     </div>
+    </>
   );
 }

@@ -11,10 +11,11 @@ You only need sections 1 to 3 to run the store locally. Sections 4 and 5 (Google
 
 1. In the project, open **SQL Editor** and click **New query**.
 2. Open [`supabase/migrations/20261018000000_init.sql`](supabase/migrations/20261018000000_init.sql), copy all of it, paste it into the editor and click **Run**. You should see "Success. No rows returned".
-3. Click **New query** again. Do the same with [`supabase/seed.sql`](supabase/seed.sql).
+3. Click **New query** again and do the same with [`supabase/migrations/20261107000000_admin.sql`](supabase/migrations/20261107000000_admin.sql) (admin dashboard rules and the product photo bucket).
+4. Click **New query** again. Do the same with [`supabase/seed.sql`](supabase/seed.sql).
    If you already ran an older seed with the phone accessories catalog, run [`supabase/replace-catalog.sql`](supabase/replace-catalog.sql) first, then `seed.sql`. It removes only products, categories and banners; accounts and orders stay.
    Seeded before product photos were added? Run [`supabase/use-photos.sql`](supabase/use-photos.sql) once to replace the grey placeholder images with photos.
-4. Check: open **Table Editor** and pick `products`. It should list 21 products.
+5. Check: open **Table Editor** and pick `products`. It should list 21 products.
 
 ## 3. Turn on sign-in and guest checkout
 
@@ -64,3 +65,7 @@ npm run dev                  # open http://localhost:3000
 ```
 
 After every `git pull`, run `npm install` again before `npm run dev`. New UI packages are added from time to time, and without them the page falls back to an old, unstyled look. If styles still look stale, stop the dev server, delete the `.next` folder and start it again.
+
+## 8. Admin dashboard
+
+To manage products, orders, banners and settings from the site instead of the Supabase tables, see [`docs/admin-guide.md`](admin-guide.md). In short: run the admin migration (step 2), sign up, then run `update public.profiles set role = 'admin' where email = 'you@example.com';` and open `/admin`.

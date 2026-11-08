@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { getCategories, getCategory } from "@/features/catalog/queries";
 import { ListingView } from "@/components/catalog/listing-view";
 import { ProductGridSkeleton } from "@/components/ui/skeleton";
+import { PageAnnouncement, PageFeatures, PageHero } from "@/components/content/page-promotions";
 
 export async function generateStaticParams() {
   return (await getCategories()).map((c) => ({ slug: c.slug }));
@@ -29,7 +30,10 @@ async function CategoryContent({ params, searchParams }: Pick<PageProps<"/catego
   if (!category) notFound();
 
   return (
+    <>
+    <PageAnnouncement page="category" categoryId={category.id} />
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <PageHero page="category" categoryId={category.id} className="mb-8" />
       <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
         <Link href="/products" className="hover:text-foreground">Products</Link> <span aria-hidden="true">/</span> {category.name}
       </nav>
@@ -38,6 +42,8 @@ async function CategoryContent({ params, searchParams }: Pick<PageProps<"/catego
       <Suspense fallback={<div className="mt-14"><ProductGridSkeleton /></div>}>
         <ListingView base={`/category/${category.slug}`} category={category.slug} searchParams={searchParams} />
       </Suspense>
+      <PageFeatures page="category" categoryId={category.id} className="mt-16" />
     </div>
+    </>
   );
 }

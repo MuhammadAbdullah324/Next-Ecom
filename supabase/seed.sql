@@ -210,12 +210,14 @@ from (values
 join public.products p on p.slug = v.product_slug
 on conflict (sku) do nothing;
 
-insert into public.promotions (placement, title, subtitle, cta_label, cta_href, image_url, sort_order)
+insert into public.promotions (placement, page, eyebrow, title, subtitle, cta_label, cta_href, cta2_label, cta2_href, image_url, sort_order)
 select * from (values
-  ('hero',   'Made for play', 'Soft, tough clothes for climbing, splashing and everything in between.', 'Shop new arrivals', '/products',
+  ('hero',    'home', 'New season', 'Made for play', 'Soft, tough clothes for climbing, splashing and everything in between.', 'Shop new arrivals', '/products',
+   'Shop baby', '/category/baby',
    'https://images.unsplash.com/photo-1541580621-cb65cc53084b?auto=format&fit=crop&w=1600&h=700&q=80', 1),
-  ('hero',   'Rain or shine', 'Waterproof jackets and light-up sneakers now up to 20% off.', 'Shop outerwear', '/category/outerwear',
+  ('feature', 'home', 'Limited time', 'Rain or shine', 'Waterproof jackets and light-up sneakers now up to 20% off.', 'Shop outerwear', '/category/outerwear',
+   null, null,
    'https://images.unsplash.com/photo-1784541281097-113e7576b5fa?auto=format&fit=crop&w=1600&h=700&q=80', 2),
-  ('banner', 'Free standard delivery over $75', 'Applied automatically at checkout.', null, null, null, 1)
-) as v(placement, title, subtitle, cta_label, cta_href, image_url, sort_order)
+  ('banner',  'home', null, 'Free standard delivery over $75', 'Applied automatically at checkout.', null, null, null, null, null, 1)
+) as v(placement, page, eyebrow, title, subtitle, cta_label, cta_href, cta2_label, cta2_href, image_url, sort_order)
 where not exists (select 1 from public.promotions);

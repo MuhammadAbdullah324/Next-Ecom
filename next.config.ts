@@ -5,6 +5,11 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    // Admin photo uploads go through Server Actions. 4 MB images plus form overhead, under
+    // Vercel's 4.5 MB request limit.
+    serverActions: { bodySizeLimit: "4.4mb" },
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "placehold.co" },

@@ -25,7 +25,7 @@ Use a throwaway Supabase project for this, since the tests create users and orde
 
 ## Database tests
 
-`supabase/tests/checkout_flow.test.sql` exercises the checkout RPCs (pricing, stock reservation, paid, failed, canceled, and the status constraint). See `supabase/tests/README.md`.
+`supabase/tests/checkout_flow.test.sql` exercises the checkout RPCs (pricing, stock reservation, paid, failed, canceled, and the status constraint). `supabase/tests/admin_flow.test.sql` checks that only admins can manage the catalog, page content, roles and orders. See `supabase/tests/README.md`.
 
 ## Manual check with real Stripe test mode
 
