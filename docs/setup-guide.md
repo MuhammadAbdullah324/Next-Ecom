@@ -5,7 +5,7 @@ You only need sections 1 to 3 to run the store locally. Sections 4 and 5 (Google
 ## 1. Create the Supabase project
 
 1. Go to <https://supabase.com/dashboard> and click **New project**.
-2. Name it `next-ecom`, set a strong database password (save it in a password manager) and pick the region closest to your customers. Click **Create new project** and wait a minute or two for it to finish.
+2. Name it `tiny-threads`, set a strong database password (save it in a password manager) and pick the region closest to your customers. Click **Create new project** and wait a minute or two for it to finish.
 
 ## 2. Create the tables and sample products
 
@@ -49,16 +49,16 @@ Until Resend is set up, Supabase's built-in email sender only allows a few email
 ## 6. GitHub
 
 1. Connect your GitHub account to Claude at <https://claude.ai/connect-github>. Install the Claude GitHub App when asked, and give it access to the new repository (or to all repositories).
-2. On GitHub, click **New repository** and name it `next-ecom`. It can be private. Leave it empty: no README, no .gitignore, no license.
-3. Send me the name as `your-username/next-ecom`.
+2. On GitHub, click **New repository** and name it `tiny-threads`. It can be private. Leave it empty: no README, no .gitignore, no license.
+3. Send me the name as `your-username/tiny-threads`.
 
 ## 7. Run it on your computer
 
 When the code is in the repo:
 
 ```sh
-git clone https://github.com/<you>/next-ecom.git
-cd next-ecom
+git clone https://github.com/<you>/tiny-threads.git
+cd tiny-threads
 npm install
 cp .env.example .env.local   # then fill in the values from steps 3 and 4
 npm run dev                  # open http://localhost:3000

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Check } from "lucide-react";
@@ -6,7 +7,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/features/admin/guard";
 import { getAdminOrder } from "@/features/admin/queries";
 import { formatMoney } from "@/lib/money";
-import { AdminPageHeader, Panel } from "@/components/admin/page-header";
+import { AdminPageHeader, Panel, AdminSkeleton } from "@/components/admin/page-header";
 import { CancelOrderForm, OrderStatusForm } from "@/components/admin/order-actions";
 import { OrderBadge } from "@/components/admin/order-badge";
 import { cn } from "@/lib/utils";
@@ -26,7 +27,7 @@ const CANCEL_REASONS: Record<string, string> = {
 
 const STEPS = ["confirmed", "processing", "shipped", "delivered"] as const;
 
-export default async function AdminOrderPage({ params }: PageProps<"/admin/orders/[id]">) {
+async function AdminOrderPageContent({ params }: PageProps<"/admin/orders/[id]">) {
   const { id } = await params;
   await requireAdmin(`/admin/orders/${id}`);
   if (!z.uuid().safeParse(id).success) notFound();
@@ -148,5 +149,15 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
         </aside>
       </div>
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function AdminOrderPage(props: PageProps<"/admin/orders/[id]">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <AdminOrderPageContent {...props} />
+    </Suspense>
   );
 }

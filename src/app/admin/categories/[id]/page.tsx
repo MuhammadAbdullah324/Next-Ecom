@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { requireAdmin } from "@/features/admin/guard";
 import { listAdminCategories } from "@/features/admin/queries";
 import { deleteCategory } from "@/features/admin/catalog-actions";
-import { AdminPageHeader, Panel } from "@/components/admin/page-header";
+import { AdminPageHeader, Panel, AdminSkeleton } from "@/components/admin/page-header";
 import { CategoryForm } from "@/components/admin/category-form";
 import { ConfirmButton } from "@/components/admin/confirm-button";
 import { Alert } from "@/components/ui/alert";
@@ -12,7 +13,7 @@ import { ButtonLink } from "@/components/ui/button";
 
 export const metadata: Metadata = { title: "Edit category" };
 
-export default async function EditCategoryPage({ params, searchParams }: PageProps<"/admin/categories/[id]">) {
+async function EditCategoryPageContent({ params, searchParams }: PageProps<"/admin/categories/[id]">) {
   const { id } = await params;
   await requireAdmin(`/admin/categories/${id}`);
   const [categories, sp] = await Promise.all([listAdminCategories(), searchParams]);
@@ -46,5 +47,15 @@ export default async function EditCategoryPage({ params, searchParams }: PagePro
         </Panel>
       </div>
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function EditCategoryPage(props: PageProps<"/admin/categories/[id]">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <EditCategoryPageContent {...props} />
+    </Suspense>
   );
 }

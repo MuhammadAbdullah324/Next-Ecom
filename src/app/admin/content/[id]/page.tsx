@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { z } from "zod";
 import { requireAdmin } from "@/features/admin/guard";
 import { getAdminPromotion, listAdminCategories } from "@/features/admin/queries";
 import { deletePromotion } from "@/features/admin/store-actions";
-import { AdminPageHeader, Panel } from "@/components/admin/page-header";
+import { AdminPageHeader, Panel, AdminSkeleton } from "@/components/admin/page-header";
 import { PromotionForm } from "@/components/admin/promotion-form";
 import { ConfirmButton } from "@/components/admin/confirm-button";
 
 export const metadata: Metadata = { title: "Edit banner" };
 
-export default async function EditPromotionPage({ params }: PageProps<"/admin/content/[id]">) {
+async function EditPromotionPageContent({ params }: PageProps<"/admin/content/[id]">) {
   const { id } = await params;
   await requireAdmin(`/admin/content/${id}`);
   if (!z.uuid().safeParse(id).success) notFound();
@@ -37,5 +38,15 @@ export default async function EditPromotionPage({ params }: PageProps<"/admin/co
         </Panel>
       </div>
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function EditPromotionPage(props: PageProps<"/admin/content/[id]">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <EditPromotionPageContent {...props} />
+    </Suspense>
   );
 }

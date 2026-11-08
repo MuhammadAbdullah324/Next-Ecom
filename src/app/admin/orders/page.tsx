@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { requireAdmin } from "@/features/admin/guard";
 import { listAdminOrders, ORDER_FILTERS, pageParam, textParam } from "@/features/admin/queries";
 import { formatMoney } from "@/lib/money";
-import { AdminPageHeader, EmptyState } from "@/components/admin/page-header";
+import { AdminPageHeader, EmptyState, AdminSkeleton } from "@/components/admin/page-header";
 import { AdminPagination } from "@/components/admin/admin-pagination";
 import { OrderBadge } from "@/components/admin/order-badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ export const metadata: Metadata = { title: "Orders" };
 
 const dateFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" });
 
-export default async function AdminOrdersPage({ searchParams }: PageProps<"/admin/orders">) {
+async function AdminOrdersPageContent({ searchParams }: PageProps<"/admin/orders">) {
   await requireAdmin("/admin/orders");
   const sp = await searchParams;
   const filters = { status: textParam(sp.status), q: textParam(sp.q), page: pageParam(sp.page) };
@@ -94,5 +95,15 @@ export default async function AdminOrdersPage({ searchParams }: PageProps<"/admi
       )}
       <AdminPagination base="/admin/orders" params={{ status: filters.status, q: filters.q }} page={filters.page} pageCount={pageCount} total={total} />
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function AdminOrdersPage(props: PageProps<"/admin/orders">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <AdminOrdersPageContent {...props} />
+    </Suspense>
   );
 }

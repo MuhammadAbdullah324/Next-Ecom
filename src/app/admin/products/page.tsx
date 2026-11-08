@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { Plus, Search } from "lucide-react";
 import { requireAdmin } from "@/features/admin/guard";
 import { listAdminCategories, listAdminProducts, pageParam, textParam } from "@/features/admin/queries";
 import { getStoreSettings } from "@/features/checkout/queries";
 import { formatMoney } from "@/lib/money";
-import { AdminPageHeader, EmptyState } from "@/components/admin/page-header";
+import { AdminPageHeader, EmptyState, AdminSkeleton } from "@/components/admin/page-header";
 import { AdminPagination } from "@/components/admin/admin-pagination";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 export const metadata: Metadata = { title: "Products" };
 
-export default async function AdminProductsPage({ searchParams }: PageProps<"/admin/products">) {
+async function AdminProductsPageContent({ searchParams }: PageProps<"/admin/products">) {
   await requireAdmin("/admin/products");
   const sp = await searchParams;
   const filters = { q: textParam(sp.q), category: textParam(sp.category), status: textParam(sp.status), page: pageParam(sp.page) };
@@ -111,5 +112,15 @@ export default async function AdminProductsPage({ searchParams }: PageProps<"/ad
       )}
       <AdminPagination base="/admin/products" params={{ q: filters.q, category: filters.category, status: filters.status }} page={filters.page} pageCount={pageCount} total={total} />
     </>
+  );
+}
+
+// The Suspense boundary sits inside the page so switching between admin pages shows the
+// skeleton at once while live data streams in (an instant navigation).
+export default function AdminProductsPage(props: PageProps<"/admin/products">) {
+  return (
+    <Suspense fallback={<AdminSkeleton />}>
+      <AdminProductsPageContent {...props} />
+    </Suspense>
   );
 }
